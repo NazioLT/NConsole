@@ -10,7 +10,7 @@
         "url": "https://linktr.ee/hennotheo"
     },
     "dependencies": {
-        
+        "com.unity.textmeshpro": "3.0.6"
     },
     "changelogUrl": "https://github.com/NazioLT/NConsole",
     "documentationUrl": "",
