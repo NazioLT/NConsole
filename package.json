@@ -1,0 +1,21 @@
+{
+    "name": "com.nazio_lt.nconsole",
+    "version": "1.0.0",
+    "displayName": "Nazio_LT Core",
+    "description": "Nazio_LT's core package.",
+    "unity": "2021.3",
+    "author": {
+        "name": "Henno Théo",
+        "email": "theo.henno21@gmail.com",
+        "url": "https://linktr.ee/hennotheo"
+    },
+    "dependencies": {
+        
+    },
+    "changelogUrl": "https://github.com/NazioLT/NConsole",
+    "documentationUrl": "",
+    "keywords": [
+        "tool",
+        "console"
+    ]
+}
