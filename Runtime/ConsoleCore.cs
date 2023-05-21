@@ -66,7 +66,7 @@ namespace Nazio_LT.Tools.Console
                     MethodInfo[] methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
                     foreach (var method in methods)
                     {
-                        if(!method.IsDefined(typeof(NCommandAttribute))) continue;
+                        if (!method.IsDefined(typeof(NCommandAttribute))) continue;
 
                         ncommands.Add(method.Name, method);
                     }
@@ -96,6 +96,22 @@ namespace Nazio_LT.Tools.Console
             }
 
             return result.ToArray();
+        }
+
+        internal static bool IsArgumentValid(ParameterInfo parameter, string token, out object value)
+        {
+            Type argumentType = parameter.ParameterType;
+
+            if (argumentType == typeof(int))
+            {
+                bool valid = int.TryParse(token, out int output);
+                value = output;
+
+                return valid;
+            }
+
+            value = null;
+            return false;
         }
     }
 }
