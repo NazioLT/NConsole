@@ -4,11 +4,13 @@ using System.Reflection;
 using System.Runtime.CompilerServices;
 using System;
 using UnityEngine;
+using Nazio_LT.Tools.Console;
 using TMPro;
+using System.Reflection.Emit;
 
 namespace Nazio_LT.Tools.Console
 {
-    public unsafe class NConsole : MonoBehaviour
+    public class NConsole : MonoBehaviour
     {
         private static NConsole s_instance = null;
 
@@ -26,30 +28,34 @@ namespace Nazio_LT.Tools.Console
             }
 
             s_instance = this;
+
+            PrintLog(LogType.Log, "Initialization Succed!");
         }
 
-        public void Log(string message)
+        private void PrintLog(LogType type, string message)
         {
-            PrintMessage(MessageType.Log, message);
-        }
+            LogInfos infos = ConsoleCore.MessageTypeFactory(type);
 
-        public void Warning(string message)
-        {
-            PrintMessage(MessageType.Warning, message);
-        }
-
-        public void Error(string message)
-        {
-            PrintMessage(MessageType.Error, message);
-        }
-
-        private void PrintMessage(MessageType type, string message)
-        {
-            MessageInfos infos = ConsoleCore.MessageTypeFactory(type);
+            string outPutMessage = $"[{infos.Prefix}] : {message}";
 
             TextMeshProUGUI text = Instantiate(m_textPrefab, transform.position, Quaternion.identity, m_consoleContentParent);
-            text.text = message;
+            text.text = outPutMessage;
             text.color = infos.Color;
+        }
+
+        private void HandleLogs(string condition, string stackTrace, LogType logType)
+        {
+            PrintLog(logType, condition);
+        }
+
+        private void OnEnable()
+        {
+            Application.logMessageReceived += HandleLogs;
+        }
+
+        private void OnDisable()
+        {
+            Application.logMessageReceived -= HandleLogs;
         }
 
         public static NConsole Instance => s_instance;

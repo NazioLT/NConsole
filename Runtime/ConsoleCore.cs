@@ -2,39 +2,51 @@ using UnityEngine;
 
 namespace Nazio_LT.Tools.Console
 {
-    internal enum MessageType
-    {
-        Log,
-        Warning,
-        Error
-    }
-
     internal static class ConsoleCore
     {
-        public static MessageInfos MessageTypeFactory(MessageType type)
+        public static LogInfos MessageTypeFactory(LogType type)
         {
-            switch(type)
+            switch (type)
             {
-                case MessageType.Warning: 
+                case LogType.Warning:
                     return WarningMessageInfos;
 
-                case MessageType.Error:
+                case LogType.Error:
                     return ErrorMessageInfos;
+
+                case LogType.Exception:
+                    return ExceptionMessageInfos;
+
+                case LogType.Assert:
+                    return AssertMessageInfos;
             }
 
             return LogMessageInfos;
-        }   
+        }
 
-        public static readonly MessageInfos LogMessageInfos = new MessageInfos(
-            Color.white
+        public static readonly LogInfos LogMessageInfos = new LogInfos(
+            Color.white,
+            "Log"
         );
 
-        public static readonly MessageInfos WarningMessageInfos = new MessageInfos(
-            Color.yellow
+        public static readonly LogInfos WarningMessageInfos = new LogInfos(
+            Color.yellow,
+            "Warning"
         );
 
-        public static readonly MessageInfos ErrorMessageInfos = new MessageInfos(
-            Color.red
+        public static readonly LogInfos ErrorMessageInfos = new LogInfos(
+            Color.red,
+            "Error"
+        );
+
+        public static readonly LogInfos ExceptionMessageInfos = new LogInfos(
+            Color.red,
+            "Exception"
+        );
+
+        public static readonly LogInfos AssertMessageInfos = new LogInfos(
+            Color.red,
+            "Assert"
         );
     }
 }

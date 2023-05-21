@@ -2,13 +2,15 @@ using UnityEngine;
 
 namespace Nazio_LT.Tools.Console
 {
-    internal struct MessageInfos
+    internal struct LogInfos
     {
-        public MessageInfos(Color color)
+        public LogInfos(Color color, string prefix)
         {
             Color = color;
+            Prefix = prefix;
         }
 
         public readonly Color Color;
+        public readonly string Prefix;
     }
 }
