@@ -279,7 +279,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   m_consoleContentParent: {fileID: 8901678857984075391}
-  m_textPrefab: {fileID: 1617679520536945387, guid: 7b913336c088b0246a5204edbb2e8b72, type: 3}
+  m_textPrefab: {fileID: 6145321294686112751, guid: 7b913336c088b0246a5204edbb2e8b72, type: 3}
 --- !u!1 &8901678857940124953
 GameObject:
   m_ObjectHideFlags: 0

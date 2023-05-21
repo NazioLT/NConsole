@@ -12,6 +12,7 @@ GameObject:
   - component: {fileID: 5362201129024584467}
   - component: {fileID: 1617679520536945387}
   - component: {fileID: 4420894587861825375}
+  - component: {fileID: 6145321294686112751}
   m_Layer: 0
   m_Name: Console Message
   m_TagString: Untagged
@@ -150,3 +151,16 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   m_HorizontalFit: 0
   m_VerticalFit: 2
+--- !u!114 &6145321294686112751
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 3456802464872646581}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60a26faf1a26e3849b68678f84e72c5e, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_logText: {fileID: 1617679520536945387}

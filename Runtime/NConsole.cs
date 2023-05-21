@@ -1,12 +1,6 @@
-using System.Collections;
 using System.Collections.Generic;
-using System.Reflection;
-using System.Runtime.CompilerServices;
-using System;
 using UnityEngine;
-using Nazio_LT.Tools.Console;
 using TMPro;
-using System.Reflection.Emit;
 
 namespace Nazio_LT.Tools.Console
 {
@@ -15,37 +9,32 @@ namespace Nazio_LT.Tools.Console
         private static NConsole s_instance = null;
 
         [SerializeField] private Transform m_consoleContentParent = null;
-        [SerializeField] private TextMeshProUGUI m_textPrefab = null;
+        [SerializeField] private NLog m_textPrefab = null;
 
-        private List<ConsoleMessage> m_messages = new List<ConsoleMessage>();
+        private List<NLog> m_messages = new List<NLog>();
 
         private void Awake()
         {
             if (s_instance != null)
             {
+                HandleLogs("Another NConsole instance exist!", "", LogType.Warning);
                 Destroy(gameObject);
                 return;
             }
 
             s_instance = this;
 
-            PrintLog(LogType.Log, "Initialization Succed!");
-        }
-
-        private void PrintLog(LogType type, string message)
-        {
-            LogInfos infos = ConsoleCore.MessageTypeFactory(type);
-
-            string outPutMessage = $"[{infos.Prefix}] : {message}";
-
-            TextMeshProUGUI text = Instantiate(m_textPrefab, transform.position, Quaternion.identity, m_consoleContentParent);
-            text.text = outPutMessage;
-            text.color = infos.Color;
+            HandleLogs("NConsole initialization succed!", "", LogType.Log);
         }
 
         private void HandleLogs(string condition, string stackTrace, LogType logType)
         {
-            PrintLog(logType, condition);
+            NLog log = Instantiate(m_textPrefab, transform.position, Quaternion.identity, m_consoleContentParent);
+
+            ConsoleMessage message = new ConsoleMessage(logType, condition);
+            log.Format(message);
+
+            m_messages.Add(log);
         }
 
         private void OnEnable()
