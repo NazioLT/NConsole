@@ -1,6 +1,8 @@
 using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine.UI;
 using UnityEngine;
+using System;
 
 namespace Nazio_LT.Tools.Console
 {
@@ -11,8 +13,10 @@ namespace Nazio_LT.Tools.Console
         [SerializeField] private Transform m_consoleContentParent = null;
         [SerializeField] private NLog m_textPrefab = null;
         [SerializeField] private Button m_clearButton = null;
+        [SerializeField] private TMPro.TMP_InputField m_terminal = null;
 
         private List<NLog> m_messages = new List<NLog>();
+        private Dictionary<string, MethodInfo> m_ncommands = new Dictionary<string, MethodInfo>();
 
         private void Awake()
         {
@@ -26,13 +30,16 @@ namespace Nazio_LT.Tools.Console
             s_instance = this;
 
             m_clearButton.onClick.AddListener(Clear);
+            m_terminal.onSubmit.AddListener(EnterCommand);
+
+            m_ncommands = ConsoleCore.GetAllNCommands();
 
             HandleLog("NConsole initialization succed!", "", LogType.Log);
         }
 
         private void Clear()
         {
-            if(m_messages == null || m_messages.Count == 0) return;
+            if (m_messages == null || m_messages.Count == 0) return;
 
             for (int i = 0; i < m_messages.Count; i++)
             {
@@ -40,6 +47,21 @@ namespace Nazio_LT.Tools.Console
             }
 
             m_messages.Clear();
+        }
+
+        private void EnterCommand(string command)
+        {
+            if (command == "") return;
+
+            m_terminal.text = "";
+
+            if (!m_ncommands.ContainsKey(command))
+            {
+                ErrorMessage("Unknown command.");
+                return;
+            }
+
+            Debug.Log(command);
         }
 
         private void HandleLog(string condition, string stackTrace, LogType logType)
@@ -50,6 +72,11 @@ namespace Nazio_LT.Tools.Console
             log.Format(message);
 
             m_messages.Add(log);
+        }
+
+        private void ErrorMessage(string message)
+        {
+            HandleLog(message, "", LogType.Error);
         }
 
         private void OnEnable()

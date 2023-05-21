@@ -1,3 +1,6 @@
+using System;
+using System.Collections.Generic;
+using System.Reflection;
 using UnityEngine;
 
 namespace Nazio_LT.Tools.Console
@@ -48,5 +51,51 @@ namespace Nazio_LT.Tools.Console
             Color.red,
             "Assert"
         );
+
+        internal static Dictionary<string, MethodInfo> GetAllNCommands()
+        {
+            Dictionary<string, MethodInfo> ncommands = new Dictionary<string, MethodInfo>();
+
+            Assembly[] assemblies = ConsoleCore.GetLinkedAssemblies();
+            foreach (var assembly in assemblies)
+            {
+                Type[] types = assembly.GetTypes();
+
+                foreach (var type in types)
+                {
+                    MethodInfo[] methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+                    foreach (var method in methods)
+                    {
+                        if(!method.IsDefined(typeof(NCommandAttribute))) continue;
+
+                        ncommands.Add(method.Name, method);
+                    }
+                }
+            }
+
+            return ncommands;
+        }
+
+        internal static Assembly[] GetLinkedAssemblies()
+        {
+            List<Assembly> result = new List<Assembly>();
+
+            string currentAssemblyName = Assembly.GetCallingAssembly().FullName;
+            Assembly[] allAssemblies = System.AppDomain.CurrentDomain.GetAssemblies();
+
+            foreach (var assembly in allAssemblies)
+            {
+                foreach (var assemblyRef in assembly.GetReferencedAssemblies())
+                {
+                    if (assemblyRef.FullName == currentAssemblyName)
+                    {
+                        result.Add(assembly);
+                        break;
+                    }
+                }
+            }
+
+            return result.ToArray();
+        }
     }
 }
