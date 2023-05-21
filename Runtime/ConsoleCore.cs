@@ -102,12 +102,35 @@ namespace Nazio_LT.Tools.Console
         {
             Type argumentType = parameter.ParameterType;
 
+            if (argumentType == typeof(string))
+            {
+                value = token;
+
+                return true;
+            }
+
             if (argumentType == typeof(int))
             {
                 bool valid = int.TryParse(token, out int output);
                 value = output;
 
                 return valid;
+            }
+
+            if (argumentType == typeof(float))
+            {
+                bool valid = float.TryParse(token, out float output);
+                value = output;
+
+                return valid;
+            }
+
+            if (argumentType == typeof(bool))
+            {
+                token = token.ToLower();
+                value = token == "true";
+
+                return token == "false" || token == "true";
             }
 
             value = null;
