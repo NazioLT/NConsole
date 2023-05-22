@@ -10,7 +10,7 @@ namespace Nazio_LT.Tools.Console
         {
             NConsole console = NConsole.Instance;
 
-            if(console == null)
+            if (console == null)
             {
                 throw new System.Exception("No console instance");
             }
@@ -25,5 +25,8 @@ namespace Nazio_LT.Tools.Console
 
             Debug.Log(helpers);
         }
+
+        [NCommand]
+        public static void Clear() => NConsole.Instance.Clear();
     }
 }

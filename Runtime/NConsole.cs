@@ -47,7 +47,7 @@ namespace Nazio_LT.Tools.Console
             HandleLog("NConsole initialization succed!", "", LogType.Log);
         }
 
-        private void Clear()
+        public void Clear()
         {
             if (m_messages == null || m_messages.Count == 0) return;
 

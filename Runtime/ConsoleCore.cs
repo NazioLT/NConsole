@@ -63,7 +63,7 @@ namespace Nazio_LT.Tools.Console
 
                 foreach (var type in types)
                 {
-                    MethodInfo[] methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.NonPublic);
+                    MethodInfo[] methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public);
                     foreach (var method in methods)
                     {
                         if (!method.IsDefined(typeof(NCommandAttribute))) continue;
@@ -72,12 +72,13 @@ namespace Nazio_LT.Tools.Console
 
                         ParameterInfo[] parameterInfos = method.GetParameters();
 
-                        NCommand command = new NCommand {
+                        NCommand command = new NCommand
+                        {
                             Attribute = attribute,
                             Name = attribute.CustomName == "" ? method.Name : attribute.CustomName,
                             Method = method,
                             ParameterInfos = parameterInfos
-                        };  
+                        };
 
                         ncommands.Add(command.Name, command);
                     }
