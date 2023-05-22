@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine;
@@ -8,6 +7,7 @@ namespace Nazio_LT.Tools.Console
 {
     public class NConsole : Selectable, ISubmitHandler, IEventSystemHandler
     {
+        [SerializeField] private NConsoleTheme m_theme = null;
         [SerializeField] private Transform m_consoleContentParent = null;
         [SerializeField] private NLog m_textPrefab = null;
         [SerializeField] private Button m_clearButton = null;
@@ -18,14 +18,11 @@ namespace Nazio_LT.Tools.Console
         private List<NLog> m_messages = new List<NLog>();
         private Dictionary<string, NCommandPolymorphism> m_ncommands = new Dictionary<string, NCommandPolymorphism>();
 
+        private GameObject m_selectedObject = null;
+
         public void ErrorMessage(string message)
         {
             HandleLog(message, "", NLogType.Error);
-        }
-
-        internal void UserMessage(string message)
-        {
-            HandleLog(message, "", NLogType.User);
         }
 
         public void Clear()
@@ -40,8 +37,52 @@ namespace Nazio_LT.Tools.Console
             m_messages.Clear();
         }
 
+        public override void OnDeselect(BaseEventData eventData)
+        {
+            m_terminal.DeactivateInputField();
+
+            base.OnDeselect(eventData);
+        }
+
+        public override void OnSelect(BaseEventData eventData)
+        {
+            m_terminal.ActivateInputField();
+
+            base.OnSelect(eventData);
+        }
+
+        public void OnSubmit(BaseEventData eventData)
+        {
+            EnterCommand(m_terminal.text);
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            Application.logMessageReceived += HandleLog;
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnEnable();
+            Application.logMessageReceived -= HandleLog;
+        }
+
+        internal void UserMessage(string message)
+        {
+            HandleLog(message, "", NLogType.User);
+        }
+
         protected override void Start()
         {
+            if(m_theme == null)
+            {
+                Debug.LogError("Console has no theme.");
+                return;
+            }
+
+            ApplyTheme();
+
             base.Start();
 
             if (!Application.isPlaying) return;
@@ -63,6 +104,11 @@ namespace Nazio_LT.Tools.Console
             HandleLog($"{m_ncommands.Count} commands registered!", "", NLogType.NConsole);
 
             HandleLog("NConsole initialization succed!", "", NLogType.NConsole);
+        }
+
+        private void ApplyTheme()
+        {
+
         }
 
         private void EnterCommand(string input)
@@ -101,11 +147,15 @@ namespace Nazio_LT.Tools.Console
 
         private void HandleLog(string condition, string stackTrace, LogType logType)
         {
+            if (!Application.isPlaying) return;
+
             HandleLog(condition, stackTrace, (NLogType)logType);
         }
 
         private void HandleLog(string condition, string stackTrace, NLogType logType)
         {
+            if (!Application.isPlaying) return;
+            
             NLog log = Instantiate(m_textPrefab, transform.position, Quaternion.identity, m_consoleContentParent);
 
             ConsoleMessage message = new ConsoleMessage(logType, condition);
@@ -114,39 +164,11 @@ namespace Nazio_LT.Tools.Console
             m_messages.Add(log);
         }
 
-        public override void OnDeselect(BaseEventData eventData)
-        {
-            m_terminal.DeactivateInputField();
-
-            base.OnDeselect(eventData);
-        }
-
-        public override void OnSelect(BaseEventData eventData)
-        {
-            m_terminal.ActivateInputField();
-
-            base.OnSelect(eventData);
-        }
-
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            Application.logMessageReceived += HandleLog;
-        }
-
-        protected override void OnDisable()
-        {
-            base.OnEnable();
-            Application.logMessageReceived -= HandleLog;
-        }
-
-        public void OnSubmit(BaseEventData eventData)
-        {
-            EnterCommand(m_terminal.text);
-        }
-
         public static NConsole Instance => s_instance;
+        public NConsoleTheme Theme => m_theme;
 
+        internal GameObject SelectedObject { get => m_selectedObject; set => m_selectedObject = value; }
         internal Dictionary<string, NCommandPolymorphism> Ncommands => m_ncommands;
+
     }
 }

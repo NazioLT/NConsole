@@ -7,67 +7,6 @@ namespace Nazio_LT.Tools.Console
 {
     internal static class ConsoleCore
     {
-        public static readonly LogInfos LogMessageInfos = new LogInfos(
-            Color.white,
-            "Log"
-        );
-
-        public static readonly LogInfos WarningMessageInfos = new LogInfos(
-            Color.yellow,
-            "Warning"
-        );
-
-        public static readonly LogInfos ErrorMessageInfos = new LogInfos(
-            Color.red,
-            "Error"
-        );
-
-        public static readonly LogInfos ExceptionMessageInfos = new LogInfos(
-            Color.red,
-            "Exception"
-        );
-
-        public static readonly LogInfos AssertMessageInfos = new LogInfos(
-            Color.red,
-            "Assert"
-        );
-
-        public static readonly LogInfos NLogMessageInfos = new LogInfos(
-            Color.cyan,
-            "NConsole"
-        );
-
-        public static readonly LogInfos UserMessageInfos = new LogInfos(
-            Color.white,
-            "User"
-        );
-
-        public static LogInfos MessageTypeFactory(NLogType type)
-        {
-            switch (type)
-            {
-                case NLogType.Warning:
-                    return WarningMessageInfos;
-
-                case NLogType.Error:
-                    return ErrorMessageInfos;
-
-                case NLogType.Exception:
-                    return ExceptionMessageInfos;
-
-                case NLogType.Assert:
-                    return AssertMessageInfos;
-
-                case NLogType.NConsole:
-                    return NLogMessageInfos;
-
-                case NLogType.User:
-                    return UserMessageInfos;
-            }
-
-            return LogMessageInfos;
-        }
-
         internal static Dictionary<string, NCommandPolymorphism> GetAllNCommands()
         {
             Dictionary<string, NCommandPolymorphism> ncommands = new Dictionary<string, NCommandPolymorphism>();
@@ -173,6 +112,18 @@ namespace Nazio_LT.Tools.Console
 
             value = null;
             return false;
+        }
+
+        public static string GetGameObjectPath(GameObject obj)
+        {
+            Transform transform = obj.transform;
+            string path = "";
+            while (transform.parent != null)
+            {
+                path = $"/{transform.parent.name}{path}";
+                transform = transform.parent;
+            }
+            return path;
         }
     }
 }

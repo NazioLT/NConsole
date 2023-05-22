@@ -6,7 +6,7 @@ namespace Nazio_LT.Tools.Console
         {
             LogType = logType;
 
-            LogInfos = ConsoleCore.MessageTypeFactory(logType);
+            LogInfos = NConsole.Instance.Theme.MessageTypeFactory(logType);
             Message = message;
             FormattedMessage = $"[{LogInfos.Prefix}] : {message}";
         }

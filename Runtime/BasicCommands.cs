@@ -28,5 +28,39 @@ namespace Nazio_LT.Tools.Console
 
         [NCommand(Description = "Clear the console.")]
         public static void Clear() => NConsole.Instance.Clear();
+
+        [NCommand]
+        public static void GetSceneHierarchy()
+        {
+            Debug.LogWarning("Not Implemented");
+        }
+
+        [NCommand]
+        public static void Select(string objectName)
+        {
+            GameObject obj = GameObject.Find(objectName);
+
+            if (obj == null)
+            {
+                Debug.LogWarning($"Object {objectName} was not found.");
+                return;
+            }
+
+            NConsole.Instance.SelectedObject = obj;
+            Debug.Log($"Object {ConsoleCore.GetGameObjectPath(obj)} was Found.");
+        }
+
+        [NCommand]
+        public static void Selected()
+        {
+            GameObject obj = NConsole.Instance.SelectedObject;
+            if (obj == null)
+            {
+                Debug.Log("No Object Selected.");
+                return;
+            }
+
+            Debug.Log($"Selected object is : {ConsoleCore.GetGameObjectPath(obj)}.");
+        }
     }
 }

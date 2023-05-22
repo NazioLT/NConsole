@@ -8,20 +8,24 @@ namespace Nazio_LT.Tools.Console
         Assert = 1,
         Warning = 2,
         Log = 3,
-        Exception = 4, 
+        Exception = 4,
         NConsole = 5,
         User = 6,
     }
 
-    internal struct LogInfos
+    [System.Serializable]
+    public struct LogInfos
     {
         public LogInfos(Color color, string prefix)
         {
-            Color = color;
+            m_Color = color;
             Prefix = prefix;
         }
 
-        public readonly Color Color;
+        [SerializeField] private Color m_Color;
+
         public readonly string Prefix;
+        
+        public Color Color => m_Color;
     }
 }
