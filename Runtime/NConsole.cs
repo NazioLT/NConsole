@@ -16,7 +16,7 @@ namespace Nazio_LT.Tools.Console
         private static NConsole s_instance = null;
 
         private List<NLog> m_messages = new List<NLog>();
-        private Dictionary<string, NCommand> m_ncommands = new Dictionary<string, NCommand>();
+        private Dictionary<string, NCommandPolymorphism> m_ncommands = new Dictionary<string, NCommandPolymorphism>();
 
         public void ErrorMessage(string message)
         {
@@ -27,9 +27,9 @@ namespace Nazio_LT.Tools.Console
         {
             base.Start();
 
-            if(!Application.isPlaying) return;
+            if (!Application.isPlaying) return;
 
-            if(s_instance)
+            if (s_instance)
             {
                 Destroy(gameObject);
                 return;
@@ -61,7 +61,7 @@ namespace Nazio_LT.Tools.Console
 
         private void EnterCommand(string input)
         {
-            if(!Application.isPlaying) return;
+            if (!Application.isPlaying) return;
 
             m_terminal.ActivateInputField();
             m_terminal.Select();
@@ -79,37 +79,17 @@ namespace Nazio_LT.Tools.Console
                 return;
             }
 
-            NCommand command = m_ncommands[commandText];
-            MethodInfo method = command.Method;
-            ParameterInfo[] parameters = command.ParameterInfos;
+            NCommandPolymorphism command = m_ncommands[commandText];
 
-            if (parameters.Length != tokens.Length - 1)
-            {
-                ErrorMessage($"Incorrect argument count. {commandText} contains {parameters.Length} arguments. " + command.ToString());
-                return;
-            }
-
-            if (parameters.Length == 0)
+            if (command.HasValidMethod(tokens, out CommandContext result))
             {
                 Debug.Log(commandText);
-                method.Invoke(null, null);
+                result.Invoke();
                 return;
             }
 
-            object[] arguments = new object[parameters.Length];
-            for (int i = 0; i < parameters.Length; i++)
-            {
-                if (!ConsoleCore.IsArgumentValid(parameters[i], tokens[i + 1], out object argument))
-                {
-                    ErrorMessage($"Argument number {i + 1} is incorrect. A {parameters[i].ParameterType} argument is expected. " + command.ToString());
-                    return;
-                }
-
-                arguments[i] = argument;
-            }
-
-            Debug.Log(commandText);
-            method.Invoke(null, arguments);
+            ErrorMessage($"{result.Error} Type Help to see all registered commands.");
+            ErrorMessage($"The most similar commands are : \n{command.ToString()}");
         }
 
         private void HandleLog(string condition, string stackTrace, LogType logType)
@@ -155,6 +135,6 @@ namespace Nazio_LT.Tools.Console
 
         public static NConsole Instance => s_instance;
 
-        internal Dictionary<string, NCommand> Ncommands => m_ncommands;
+        internal Dictionary<string, NCommandPolymorphism> Ncommands => m_ncommands;
     }
 }

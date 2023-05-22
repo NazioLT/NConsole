@@ -52,9 +52,9 @@ namespace Nazio_LT.Tools.Console
             "Assert"
         );
 
-        internal static Dictionary<string, NCommand> GetAllNCommands()
+        internal static Dictionary<string, NCommandPolymorphism> GetAllNCommands()
         {
-            Dictionary<string, NCommand> ncommands = new Dictionary<string, NCommand>();
+            Dictionary<string, NCommandPolymorphism> ncommands = new Dictionary<string, NCommandPolymorphism>();
 
             Assembly[] assemblies = ConsoleCore.GetLinkedAssemblies();
             foreach (var assembly in assemblies)
@@ -80,7 +80,15 @@ namespace Nazio_LT.Tools.Console
                             ParameterInfos = parameterInfos
                         };
 
-                        ncommands.Add(command.Name, command);
+                        string key = command.Name;
+
+                        if(ncommands.ContainsKey(key))
+                        {
+                            ncommands[key].Add(command);
+                            continue;
+                        }
+
+                        ncommands.Add(key, new NCommandPolymorphism(command));
                     }
                 }
             }
