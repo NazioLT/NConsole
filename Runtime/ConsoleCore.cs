@@ -52,9 +52,9 @@ namespace Nazio_LT.Tools.Console
             "Assert"
         );
 
-        internal static Dictionary<string, MethodInfo> GetAllNCommands()
+        internal static Dictionary<string, NCommand> GetAllNCommands()
         {
-            Dictionary<string, MethodInfo> ncommands = new Dictionary<string, MethodInfo>();
+            Dictionary<string, NCommand> ncommands = new Dictionary<string, NCommand>();
 
             Assembly[] assemblies = ConsoleCore.GetLinkedAssemblies();
             foreach (var assembly in assemblies)
@@ -68,7 +68,15 @@ namespace Nazio_LT.Tools.Console
                     {
                         if (!method.IsDefined(typeof(NCommandAttribute))) continue;
 
-                        ncommands.Add(method.Name, method);
+                        NCommandAttribute attribute = method.GetCustomAttribute<NCommandAttribute>();
+
+                        NCommand command = new NCommand {
+                            Attribute = attribute,
+                            Name = attribute.CustomName == "" ? method.Name : attribute.CustomName,
+                            Method = method
+                        };  
+
+                        ncommands.Add(command.Name, command);
                     }
                 }
             }

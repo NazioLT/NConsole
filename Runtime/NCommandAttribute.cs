@@ -5,11 +5,7 @@ namespace Nazio_LT.Tools.Console
     [AttributeUsage(AttributeTargets.Method)]
     public class NCommandAttribute : Attribute
     {
-        public NCommandAttribute(string description = "")
-        {
-            Description = description;
-        }
-
-        public readonly string Description;
+        public string Description = "";
+        public string CustomName = "";
     }
 }

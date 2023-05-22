@@ -6,6 +6,13 @@ using UnityEngine;
 
 namespace Nazio_LT.Tools.Console
 {
+    internal struct NCommand
+    {
+        public string Name;
+        public NCommandAttribute Attribute;
+        public MethodInfo Method;
+    }
+
     public class NConsole : Selectable, ISubmitHandler, IEventSystemHandler
     {
         [SerializeField] private Transform m_consoleContentParent = null;
@@ -16,7 +23,7 @@ namespace Nazio_LT.Tools.Console
         private static NConsole s_instance = null;
 
         private List<NLog> m_messages = new List<NLog>();
-        private Dictionary<string, MethodInfo> m_ncommands = new Dictionary<string, MethodInfo>();
+        private Dictionary<string, NCommand> m_ncommands = new Dictionary<string, NCommand>();
 
         public void ErrorMessage(string message)
         {
@@ -71,27 +78,28 @@ namespace Nazio_LT.Tools.Console
             m_terminal.text = "";
 
             string[] tokens = input.Split(' ');
-            string command = tokens[0];
+            string commandText = tokens[0];
 
-            if (!m_ncommands.ContainsKey(command))
+            if (!m_ncommands.ContainsKey(commandText))
             {
                 ErrorMessage("Unknown command.");
                 return;
             }
 
-            MethodInfo method = m_ncommands[command];
+            NCommand command = m_ncommands[commandText];
+            MethodInfo method = command.Method;
             ParameterInfo[] parameters = method.GetParameters();
 
             if (parameters.Length != tokens.Length - 1)
             {
-                ErrorMessage($"Incorrect argument count. {command} contains {parameters.Length} arguments.");
+                ErrorMessage($"Incorrect argument count. {commandText} contains {parameters.Length} arguments.");
                 return;
             }
 
             if (parameters.Length == 0)
             {
-                Debug.Log(command);
-                m_ncommands[command].Invoke(null, null);
+                Debug.Log(commandText);
+                method.Invoke(null, null);
                 return;
             }
 
@@ -107,8 +115,8 @@ namespace Nazio_LT.Tools.Console
                 arguments[i] = argument;
             }
 
-            Debug.Log(command);
-            m_ncommands[command].Invoke(null, arguments);
+            Debug.Log(commandText);
+            method.Invoke(null, arguments);
         }
 
         private void HandleLog(string condition, string stackTrace, LogType logType)
@@ -154,6 +162,6 @@ namespace Nazio_LT.Tools.Console
 
         public static NConsole Instance => s_instance;
 
-        internal Dictionary<string, MethodInfo> Ncommands => m_ncommands;
+        internal Dictionary<string, NCommand> Ncommands => m_ncommands;
     }
 }
