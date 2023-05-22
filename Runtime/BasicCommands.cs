@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.Reflection;
 using UnityEngine;
 
 namespace Nazio_LT.Tools.Console
@@ -21,7 +20,7 @@ namespace Nazio_LT.Tools.Console
 
             foreach (var cmd in commands.Values)
             {
-                helpers += "- " + cmd.Description + '\n';
+                helpers += "- " + cmd.ToString() + '\n';
             }
 
             Debug.Log(helpers);

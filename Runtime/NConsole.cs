@@ -85,7 +85,7 @@ namespace Nazio_LT.Tools.Console
 
             if (parameters.Length != tokens.Length - 1)
             {
-                ErrorMessage($"Incorrect argument count. {commandText} contains {parameters.Length} arguments.");
+                ErrorMessage($"Incorrect argument count. {commandText} contains {parameters.Length} arguments. " + command.ToString());
                 return;
             }
 
@@ -101,7 +101,7 @@ namespace Nazio_LT.Tools.Console
             {
                 if (!ConsoleCore.IsArgumentValid(parameters[i], tokens[i + 1], out object argument))
                 {
-                    ErrorMessage($"Argument number {i + 1} is incorrect. A {parameters[i].ParameterType} argument is expected.");
+                    ErrorMessage($"Argument number {i + 1} is incorrect. A {parameters[i].ParameterType} argument is expected. " + command.ToString());
                     return;
                 }
 

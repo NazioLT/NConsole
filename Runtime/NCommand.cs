@@ -9,22 +9,19 @@ namespace Nazio_LT.Tools.Console
         public MethodInfo Method;
         public ParameterInfo[] ParameterInfos;
 
-        public string Description
+        public override string ToString()
         {
-            get
+            string arguments = " ";
+
+            foreach (var param in ParameterInfos)
             {
-                string arguments = " ";
-
-                foreach (var param in ParameterInfos)
-                {
-                    arguments += $"({param.ParameterType.ToString()}){param.Name} ";
-                }
-
-                string commandText = Name + arguments;
-                string description = Attribute.Description == "" ? "" : (" : " + Attribute.Description);
-
-                return commandText + description;
+                arguments += $"({param.ParameterType.ToString()}){param.Name} ";
             }
+
+            string commandText = Name + arguments;
+            string description = Attribute.Description == "" ? "" : (" : " + Attribute.Description);
+
+            return commandText + description;
         }
     }
 }
