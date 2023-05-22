@@ -21,8 +21,7 @@ namespace Nazio_LT.Tools.Console
 
             foreach (var cmd in commands.Values)
             {
-                NCommandAttribute attribute = cmd.Method.GetCustomAttribute<NCommandAttribute>();
-                helpers += "- " + cmd.Name + " : " + attribute.Description + '\n';
+                helpers += "- " + cmd.Description + '\n';
             }
 
             Debug.Log(helpers);

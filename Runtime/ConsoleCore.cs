@@ -70,10 +70,13 @@ namespace Nazio_LT.Tools.Console
 
                         NCommandAttribute attribute = method.GetCustomAttribute<NCommandAttribute>();
 
+                        ParameterInfo[] parameterInfos = method.GetParameters();
+
                         NCommand command = new NCommand {
                             Attribute = attribute,
                             Name = attribute.CustomName == "" ? method.Name : attribute.CustomName,
-                            Method = method
+                            Method = method,
+                            ParameterInfos = parameterInfos
                         };  
 
                         ncommands.Add(command.Name, command);

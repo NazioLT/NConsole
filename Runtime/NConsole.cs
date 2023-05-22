@@ -6,13 +6,6 @@ using UnityEngine;
 
 namespace Nazio_LT.Tools.Console
 {
-    internal struct NCommand
-    {
-        public string Name;
-        public NCommandAttribute Attribute;
-        public MethodInfo Method;
-    }
-
     public class NConsole : Selectable, ISubmitHandler, IEventSystemHandler
     {
         [SerializeField] private Transform m_consoleContentParent = null;
@@ -88,7 +81,7 @@ namespace Nazio_LT.Tools.Console
 
             NCommand command = m_ncommands[commandText];
             MethodInfo method = command.Method;
-            ParameterInfo[] parameters = method.GetParameters();
+            ParameterInfo[] parameters = command.ParameterInfos;
 
             if (parameters.Length != tokens.Length - 1)
             {
