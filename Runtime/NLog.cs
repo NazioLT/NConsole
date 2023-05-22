@@ -15,4 +15,9 @@ namespace Nazio_LT.Tools.Console
             message.FormatText(m_logText);
         }
     }
+
+    public static class NDebug
+    {
+        
+    }
 }

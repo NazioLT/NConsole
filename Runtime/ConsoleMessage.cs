@@ -1,10 +1,8 @@
-using UnityEngine;
-
 namespace Nazio_LT.Tools.Console
 {
     internal struct ConsoleMessage
     {
-        public ConsoleMessage(LogType logType, string message)
+        public ConsoleMessage(NLogType logType, string message)
         {
             LogType = logType;
 
@@ -13,7 +11,7 @@ namespace Nazio_LT.Tools.Console
             FormattedMessage = $"[{LogInfos.Prefix}] : {message}";
         }
 
-        public readonly LogType LogType;
+        public readonly NLogType LogType;
         public readonly LogInfos LogInfos;
         public readonly string Message;
         public readonly string FormattedMessage;

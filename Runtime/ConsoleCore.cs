@@ -7,26 +7,6 @@ namespace Nazio_LT.Tools.Console
 {
     internal static class ConsoleCore
     {
-        public static LogInfos MessageTypeFactory(LogType type)
-        {
-            switch (type)
-            {
-                case LogType.Warning:
-                    return WarningMessageInfos;
-
-                case LogType.Error:
-                    return ErrorMessageInfos;
-
-                case LogType.Exception:
-                    return ExceptionMessageInfos;
-
-                case LogType.Assert:
-                    return AssertMessageInfos;
-            }
-
-            return LogMessageInfos;
-        }
-
         public static readonly LogInfos LogMessageInfos = new LogInfos(
             Color.white,
             "Log"
@@ -51,6 +31,42 @@ namespace Nazio_LT.Tools.Console
             Color.red,
             "Assert"
         );
+
+        public static readonly LogInfos NLogMessageInfos = new LogInfos(
+            Color.cyan,
+            "NConsole"
+        );
+
+        public static readonly LogInfos UserMessageInfos = new LogInfos(
+            Color.white,
+            "User"
+        );
+
+        public static LogInfos MessageTypeFactory(NLogType type)
+        {
+            switch (type)
+            {
+                case NLogType.Warning:
+                    return WarningMessageInfos;
+
+                case NLogType.Error:
+                    return ErrorMessageInfos;
+
+                case NLogType.Exception:
+                    return ExceptionMessageInfos;
+
+                case NLogType.Assert:
+                    return AssertMessageInfos;
+
+                case NLogType.NConsole:
+                    return NLogMessageInfos;
+
+                case NLogType.User:
+                    return UserMessageInfos;
+            }
+
+            return LogMessageInfos;
+        }
 
         internal static Dictionary<string, NCommandPolymorphism> GetAllNCommands()
         {
@@ -82,7 +98,7 @@ namespace Nazio_LT.Tools.Console
 
                         string key = command.Name;
 
-                        if(ncommands.ContainsKey(key))
+                        if (ncommands.ContainsKey(key))
                         {
                             ncommands[key].Add(command);
                             continue;

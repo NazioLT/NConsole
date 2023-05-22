@@ -20,7 +20,24 @@ namespace Nazio_LT.Tools.Console
 
         public void ErrorMessage(string message)
         {
-            HandleLog(message, "", LogType.Error);
+            HandleLog(message, "", NLogType.Error);
+        }
+
+        internal void UserMessage(string message)
+        {
+            HandleLog(message, "", NLogType.User);
+        }
+
+        public void Clear()
+        {
+            if (m_messages == null || m_messages.Count == 0) return;
+
+            for (int i = 0; i < m_messages.Count; i++)
+            {
+                Destroy(m_messages[i].gameObject);
+            }
+
+            m_messages.Clear();
         }
 
         protected override void Start()
@@ -43,20 +60,9 @@ namespace Nazio_LT.Tools.Console
             m_terminal.onSubmit.AddListener(EnterCommand);
 
             m_ncommands = ConsoleCore.GetAllNCommands();
+            HandleLog($"{m_ncommands.Count} commands registered!", "", NLogType.NConsole);
 
-            HandleLog("NConsole initialization succed!", "", LogType.Log);
-        }
-
-        public void Clear()
-        {
-            if (m_messages == null || m_messages.Count == 0) return;
-
-            for (int i = 0; i < m_messages.Count; i++)
-            {
-                Destroy(m_messages[i].gameObject);
-            }
-
-            m_messages.Clear();
+            HandleLog("NConsole initialization succed!", "", NLogType.NConsole);
         }
 
         private void EnterCommand(string input)
@@ -67,6 +73,8 @@ namespace Nazio_LT.Tools.Console
             m_terminal.Select();
 
             if (input == "") return;
+
+            UserMessage(input);
 
             m_terminal.text = "";
 
@@ -83,7 +91,6 @@ namespace Nazio_LT.Tools.Console
 
             if (command.HasValidMethod(tokens, out CommandContext result))
             {
-                Debug.Log(commandText);
                 result.Invoke();
                 return;
             }
@@ -93,6 +100,11 @@ namespace Nazio_LT.Tools.Console
         }
 
         private void HandleLog(string condition, string stackTrace, LogType logType)
+        {
+            HandleLog(condition, stackTrace, (NLogType)logType);
+        }
+
+        private void HandleLog(string condition, string stackTrace, NLogType logType)
         {
             NLog log = Instantiate(m_textPrefab, transform.position, Quaternion.identity, m_consoleContentParent);
 
