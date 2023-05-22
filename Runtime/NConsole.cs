@@ -1,18 +1,19 @@
 using System.Collections.Generic;
 using System.Reflection;
+using UnityEngine.EventSystems;
 using UnityEngine.UI;
 using UnityEngine;
 
 namespace Nazio_LT.Tools.Console
 {
-    public class NConsole : MonoBehaviour
+    public class NConsole : Selectable, ISubmitHandler, IEventSystemHandler
     {
-        private static NConsole s_instance = null;
-
         [SerializeField] private Transform m_consoleContentParent = null;
         [SerializeField] private NLog m_textPrefab = null;
         [SerializeField] private Button m_clearButton = null;
-        [SerializeField] private TMPro.TMP_InputField m_terminal = null;
+        [SerializeField] private Terminal m_terminal = null;
+
+        private static NConsole s_instance = null;
 
         private List<NLog> m_messages = new List<NLog>();
         private Dictionary<string, MethodInfo> m_ncommands = new Dictionary<string, MethodInfo>();
@@ -22,16 +23,21 @@ namespace Nazio_LT.Tools.Console
             HandleLog(message, "", LogType.Error);
         }
 
-        private void Awake()
+        protected override void Start()
         {
-            if (s_instance != null)
+            base.Start();
+
+            if(!Application.isPlaying) return;
+
+            if(s_instance)
             {
-                HandleLog("Another NConsole instance exist!", "", LogType.Warning);
                 Destroy(gameObject);
                 return;
             }
 
             s_instance = this;
+
+            if (!Application.isPlaying) return;
 
             m_clearButton.onClick.AddListener(Clear);
             m_terminal.onSubmit.AddListener(EnterCommand);
@@ -55,6 +61,8 @@ namespace Nazio_LT.Tools.Console
 
         private void EnterCommand(string input)
         {
+            if(!Application.isPlaying) return;
+
             m_terminal.ActivateInputField();
             m_terminal.Select();
 
@@ -74,7 +82,7 @@ namespace Nazio_LT.Tools.Console
             MethodInfo method = m_ncommands[command];
             ParameterInfo[] parameters = method.GetParameters();
 
-            if(parameters.Length != tokens.Length - 1)
+            if (parameters.Length != tokens.Length - 1)
             {
                 ErrorMessage($"Incorrect argument count. {command} contains {parameters.Length} arguments.");
                 return;
@@ -90,7 +98,7 @@ namespace Nazio_LT.Tools.Console
             object[] arguments = new object[parameters.Length];
             for (int i = 0; i < parameters.Length; i++)
             {
-                if(!ConsoleCore.IsArgumentValid(parameters[i], tokens[i + 1], out object argument))
+                if (!ConsoleCore.IsArgumentValid(parameters[i], tokens[i + 1], out object argument))
                 {
                     ErrorMessage($"Argument number {i + 1} is incorrect. A {parameters[i].ParameterType} argument is expected.");
                     return;
@@ -113,16 +121,39 @@ namespace Nazio_LT.Tools.Console
             m_messages.Add(log);
         }
 
-        private void OnEnable()
+        public override void OnDeselect(BaseEventData eventData)
         {
+            m_terminal.DeactivateInputField();
+
+            base.OnDeselect(eventData);
+        }
+
+        public override void OnSelect(BaseEventData eventData)
+        {
+            m_terminal.ActivateInputField();
+
+            base.OnSelect(eventData);
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
             Application.logMessageReceived += HandleLog;
         }
 
-        private void OnDisable()
+        protected override void OnDisable()
         {
+            base.OnEnable();
             Application.logMessageReceived -= HandleLog;
         }
 
+        public void OnSubmit(BaseEventData eventData)
+        {
+            EnterCommand(m_terminal.text);
+        }
+
         public static NConsole Instance => s_instance;
+
+        internal Dictionary<string, MethodInfo> Ncommands => m_ncommands;
     }
 }

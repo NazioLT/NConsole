@@ -95,6 +95,8 @@ namespace Nazio_LT.Tools.Console
                 }
             }
 
+            result.Add(Assembly.GetExecutingAssembly());
+
             return result.ToArray();
         }
 
