@@ -181,7 +181,8 @@ namespace Nazio_LT.Tools.Console
 
             m_terminal.text = "";
 
-            string[] tokens = input.Split(' ');
+            string[] tokens = ConsoleCore.GetTokens(input);
+
             string commandText = tokens[0];
 
             if (!m_ncommands.ContainsKey(commandText))

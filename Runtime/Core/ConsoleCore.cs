@@ -75,6 +75,21 @@ namespace Nazio_LT.Tools.Console
             return result.ToArray();
         }
 
+        internal static string[] GetTokens(string input)
+        {
+            string[] tokens = input.Split(' ');
+            List<string> goodTokens = new List<string>();
+            foreach (var item in tokens)
+            {
+                if(string.IsNullOrWhiteSpace(item))
+                    continue;
+                
+                goodTokens.Add(item);
+            }
+
+            return goodTokens.ToArray();
+        }
+
         internal static bool IsArgumentValid(ParameterInfo parameter, string token, out object value)
         {
             Type argumentType = parameter.ParameterType;
