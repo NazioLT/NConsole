@@ -62,5 +62,7 @@ namespace Nazio_LT.Tools.Console
 
             Debug.Log($"Selected object is : {ConsoleCore.GetGameObjectPath(obj)}.");
         }
+
+        // public static void 
     }
 }

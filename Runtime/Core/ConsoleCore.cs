@@ -117,7 +117,7 @@ namespace Nazio_LT.Tools.Console
         public static string GetGameObjectPath(GameObject obj)
         {
             Transform transform = obj.transform;
-            string path = "";
+            string path = obj.transform.name;
             while (transform.parent != null)
             {
                 path = $"/{transform.parent.name}{path}";
