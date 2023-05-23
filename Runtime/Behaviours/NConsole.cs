@@ -15,6 +15,9 @@ namespace Nazio_LT.Tools.Console
 
         private static NConsole s_instance = null;
 
+        private List<string> m_sendCommand = new List<string>();
+        private int m_sendCommandId = 0;
+        private string m_writedLine = "";
         private List<NLog> m_messages = new List<NLog>();
         private Dictionary<string, NCommandPolymorphism> m_ncommands = new Dictionary<string, NCommandPolymorphism>();
 
@@ -68,14 +71,65 @@ namespace Nazio_LT.Tools.Console
             Application.logMessageReceived -= HandleLog;
         }
 
+        internal void ArrowInput(bool up)
+        {
+            if (m_sendCommand.Count == 0)
+                return;
+
+            bool isAtCurrentCommand = m_sendCommandId >= m_sendCommand.Count;
+
+            if (up)
+            {
+                if (m_sendCommandId == 0)
+                    return;
+
+                if (isAtCurrentCommand)
+                {
+                    m_writedLine = m_terminal.text;
+                }
+
+                m_sendCommandId--;
+            }
+            else
+            {
+                m_sendCommandId++;
+
+                if (isAtCurrentCommand)
+                {
+                    m_terminal.text = m_writedLine;
+                    m_sendCommandId = m_sendCommand.Count;
+                    return;
+                }
+            }
+
+            m_terminal.text = m_sendCommand[m_sendCommandId];
+        }
+
         internal void UserMessage(string message)
         {
             HandleLog(message, "", NLogType.User);
         }
 
+        internal void SetSelectedGameObject(GameObject obj)
+        {
+            m_selectedObject = obj;
+        }
+
+        internal bool TryGetSelectedGameObject(out GameObject obj)
+        {
+            obj = m_selectedObject;
+            if (obj == null)
+            {
+                Debug.Log("No Object Selected.");
+                return false;
+            }
+
+            return true;
+        }
+
         protected override void Start()
         {
-            if(m_theme == null)
+            if (m_theme == null)
             {
                 Debug.LogError("Console has no theme.");
                 return;
@@ -99,6 +153,7 @@ namespace Nazio_LT.Tools.Console
 
             m_clearButton.onClick.AddListener(Clear);
             m_terminal.onSubmit.AddListener(EnterCommand);
+            m_terminal.onValueChanged.AddListener(OnInputFieldValueChange);
 
             m_ncommands = ConsoleCore.GetAllNCommands();
             HandleLog($"{m_ncommands.Count} commands registered!", "", NLogType.NConsole);
@@ -121,6 +176,8 @@ namespace Nazio_LT.Tools.Console
             if (input == "") return;
 
             UserMessage(input);
+            m_sendCommand.Add(input);
+            m_sendCommandId = m_sendCommand.Count;
 
             m_terminal.text = "";
 
@@ -155,7 +212,7 @@ namespace Nazio_LT.Tools.Console
         private void HandleLog(string condition, string stackTrace, NLogType logType)
         {
             if (!Application.isPlaying) return;
-            
+
             NLog log = Instantiate(m_textPrefab, transform.position, Quaternion.identity, m_consoleContentParent);
 
             ConsoleMessage message = new ConsoleMessage(logType, condition);
@@ -164,11 +221,14 @@ namespace Nazio_LT.Tools.Console
             m_messages.Add(log);
         }
 
+        private void OnInputFieldValueChange(string text)
+        {
+            // m_sendCommandId = m_sendCommand.Count;
+        }
+
         public static NConsole Instance => s_instance;
         public NConsoleTheme Theme => m_theme;
 
-        internal GameObject SelectedObject { get => m_selectedObject; set => m_selectedObject = value; }
         internal Dictionary<string, NCommandPolymorphism> Ncommands => m_ncommands;
-
     }
 }

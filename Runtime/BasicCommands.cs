@@ -46,23 +46,44 @@ namespace Nazio_LT.Tools.Console
                 return;
             }
 
-            NConsole.Instance.SelectedObject = obj;
+            NConsole.Instance.SetSelectedGameObject(obj);
             Debug.Log($"Object {ConsoleCore.GetGameObjectPath(obj)} was Found.");
         }
 
         [NCommand]
         public static void Selected()
         {
-            GameObject obj = NConsole.Instance.SelectedObject;
-            if (obj == null)
-            {
-                Debug.Log("No Object Selected.");
+            if (!NConsole.Instance.TryGetSelectedGameObject(out GameObject obj))
                 return;
-            }
 
             Debug.Log($"Selected object is : {ConsoleCore.GetGameObjectPath(obj)}.");
         }
 
-        // public static void 
+        [NCommand]
+        public static void DestroySelected()
+        {
+            if (!NConsole.Instance.TryGetSelectedGameObject(out GameObject obj))
+                return;
+
+            Debug.Log($"Destroyed : {ConsoleCore.GetGameObjectPath(obj)}.");
+            GameObject.Destroy(obj);
+        }
+
+        [NCommand]
+        public static void Move(Vector3 position)
+        {
+            if (!NConsole.Instance.TryGetSelectedGameObject(out GameObject obj))
+                return;
+
+            Debug.Log($"{ConsoleCore.GetGameObjectPath(obj)} moved to : {position}.");
+            obj.transform.position = position;
+        }
+
+        [NCommand]
+        public static void Move(Vector3 position, string objectName)
+        {
+            Select("objectName");
+            Move(position);
+        }
     }
 }

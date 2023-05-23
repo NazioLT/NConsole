@@ -110,11 +110,32 @@ namespace Nazio_LT.Tools.Console
                 return token == "false" || token == "true";
             }
 
+            if (argumentType == typeof(Vector3))
+            {
+                string[] argsTokens = token.Split(',');
+                value = new Vector3();
+
+                if (argsTokens.Length != 3)
+                {
+                    return false;
+                }
+
+                if (float.TryParse(argsTokens[0], out float x) && float.TryParse(argsTokens[1], out float y) && float.TryParse(argsTokens[2], out float z))
+                {
+                    value = new Vector3(x, y, z);
+                    return true;
+                }
+
+                return false;
+            }
+
             value = null;
             return false;
         }
 
-        public static string GetGameObjectPath(GameObject obj)
+        // internal static string 
+
+        internal static string GetGameObjectPath(GameObject obj)
         {
             Transform transform = obj.transform;
             string path = obj.transform.name;
