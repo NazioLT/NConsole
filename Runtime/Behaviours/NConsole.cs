@@ -12,16 +12,22 @@ namespace Nazio_LT.Tools.Console
         [SerializeField] private NLog m_textPrefab = null;
         [SerializeField] private Button m_clearButton = null;
         [SerializeField] private Terminal m_terminal = null;
+        [SerializeField] private AutoCompletion m_autoCompletion = null;
 
         private static NConsole s_instance = null;
 
-        private List<string> m_sendCommand = new List<string>();
-        private int m_sendCommandId = 0;
-        private string m_writedLine = "";
+        //Commands
         private List<NLog> m_messages = new List<NLog>();
         private Dictionary<string, NCommandPolymorphism> m_ncommands = new Dictionary<string, NCommandPolymorphism>();
 
+        //Typed Commands
+        private List<string> m_sendCommand = new List<string>();
+        private int m_sendCommandId = 0;
+        private string m_writedLine = "";
+
         private GameObject m_selectedObject = null;
+
+        #region Public
 
         public void ErrorMessage(string message)
         {
@@ -59,31 +65,19 @@ namespace Nazio_LT.Tools.Console
             EnterCommand(m_terminal.text);
         }
 
-        protected override void OnEnable()
-        {
-            base.OnEnable();
-            Application.logMessageReceived += HandleLog;
-        }
-
-        protected override void OnDisable()
-        {
-            base.OnEnable();
-            Application.logMessageReceived -= HandleLog;
-        }
+        #endregion
 
         internal void ArrowInput(bool up)
         {
             if (m_sendCommand.Count == 0)
                 return;
 
-            bool isAtCurrentCommand = m_sendCommandId >= m_sendCommand.Count;
-
             if (up)
             {
                 if (m_sendCommandId == 0)
                     return;
 
-                if (isAtCurrentCommand)
+                if (m_sendCommandId >= m_sendCommand.Count)
                 {
                     m_writedLine = m_terminal.text;
                 }
@@ -94,7 +88,7 @@ namespace Nazio_LT.Tools.Console
             {
                 m_sendCommandId++;
 
-                if (isAtCurrentCommand)
+                if (m_sendCommandId >= m_sendCommand.Count)
                 {
                     m_terminal.text = m_writedLine;
                     m_sendCommandId = m_sendCommand.Count;
@@ -125,6 +119,18 @@ namespace Nazio_LT.Tools.Console
             }
 
             return true;
+        }
+
+        protected override void OnEnable()
+        {
+            base.OnEnable();
+            Application.logMessageReceived += HandleLog;
+        }
+
+        protected override void OnDisable()
+        {
+            base.OnEnable();
+            Application.logMessageReceived -= HandleLog;
         }
 
         protected override void Start()
@@ -225,9 +231,11 @@ namespace Nazio_LT.Tools.Console
         private void OnInputFieldValueChange(string text)
         {
             // m_sendCommandId = m_sendCommand.Count;
+            m_autoCompletion.SetInput(text);
         }
 
         public static NConsole Instance => s_instance;
+
         public NConsoleTheme Theme => m_theme;
 
         internal Dictionary<string, NCommandPolymorphism> Ncommands => m_ncommands;
