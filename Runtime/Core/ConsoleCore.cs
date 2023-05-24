@@ -32,7 +32,8 @@ namespace Nazio_LT.Tools.Console
                             Attribute = attribute,
                             Name = attribute.CustomName == "" ? method.Name : attribute.CustomName,
                             Method = method,
-                            ParameterInfos = parameterInfos
+                            ParameterInfos = parameterInfos,
+                            UseSelectedObject = attribute.UseSelectedObject
                         };
 
                         string key = command.Name;
@@ -147,8 +148,6 @@ namespace Nazio_LT.Tools.Console
             value = null;
             return false;
         }
-
-        // internal static string 
 
         internal static string GetGameObjectPath(GameObject obj)
         {

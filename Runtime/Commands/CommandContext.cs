@@ -9,9 +9,11 @@ namespace Nazio_LT.Tools.Console
             Error = "";
             Method = method;
             Arguments = new object[argumentCount];
+            OtherCommandsPurposes = true;
         }
 
         internal string Error;
+        internal bool OtherCommandsPurposes;
         internal MethodInfo Method;
         internal object[] Arguments;
 

@@ -30,6 +30,18 @@ namespace Nazio_LT.Tools.Console
 
         #region Public
 
+        public bool TryGetSelectedGameObject(out GameObject obj)
+        {
+            obj = m_selectedObject;
+            if (obj == null)
+            {
+                Debug.Log("No Object Selected.");
+                return false;
+            }
+
+            return true;
+        }
+
         public void ErrorMessage(string message)
         {
             HandleLog(message, "", NLogType.Error);
@@ -76,6 +88,7 @@ namespace Nazio_LT.Tools.Console
                 return;
 
             m_terminal.text = mostProbableCmd;
+            m_terminal.MoveTextEnd(false);
         }
 
         internal void ArrowInput(bool up)
@@ -124,18 +137,6 @@ namespace Nazio_LT.Tools.Console
         internal void SetSelectedGameObject(GameObject obj)
         {
             m_selectedObject = obj;
-        }
-
-        internal bool TryGetSelectedGameObject(out GameObject obj)
-        {
-            obj = m_selectedObject;
-            if (obj == null)
-            {
-                Debug.Log("No Object Selected.");
-                return false;
-            }
-
-            return true;
         }
 
         protected override void OnEnable()
@@ -221,7 +222,8 @@ namespace Nazio_LT.Tools.Console
             }
 
             ErrorMessage($"{result.Error} Type Help to see all registered commands.");
-            ErrorMessage($"The most similar commands are : \n{command.ToString()}");
+            if (result.OtherCommandsPurposes)
+                ErrorMessage($"The most similar commands are : \n{command.ToString()}");
         }
 
         private void HandleLog(string condition, string stackTrace, LogType logType)

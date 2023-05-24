@@ -26,7 +26,7 @@ namespace Nazio_LT.Tools.Console
             List<NCommand> argumentCountedCommand = new List<NCommand>();
             foreach (var command in m_commands)
             {
-                if(command.ParameterInfos.Length == argumentCount)
+                if(command.ExpectedArgumentCount == argumentCount)
                 {
                     argumentCountedCommand.Add(command);
                 }
@@ -41,10 +41,7 @@ namespace Nazio_LT.Tools.Console
             foreach (var command in argumentCountedCommand)
             {
                 if(command.IsArgumentsValid(tokens, out result))
-                {
                     return true;
-                }
-
             }
 
             return false;

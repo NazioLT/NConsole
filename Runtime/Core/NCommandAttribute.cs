@@ -7,5 +7,6 @@ namespace Nazio_LT.Tools.Console
     {
         public string Description = "";
         public string CustomName = "";
+        public bool UseSelectedObject = false;
     }
 }
