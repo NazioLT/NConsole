@@ -6,56 +6,86 @@ namespace Nazio_LT.Tools.Console
 {
     public class AutoCompletion : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI text = null;
+        [SerializeField] private TextMeshProUGUI[] m_texts = null;
+
+        private string m_mostProbableCommand = "";
 
         private Dictionary<string, NCommandPolymorphism> m_ncommands = new Dictionary<string, NCommandPolymorphism>();
 
         private void Start()
         {
             m_ncommands = NConsole.Instance.Ncommands;
+            DisableAllTexts();
+        }
+
+        private void DisableAllTexts()
+        {
+            foreach (var text in m_texts)
+            {
+                text.gameObject.SetActive(false);
+            }
+        }
+
+        private void SetTexts(string[] texts)
+        {
+            for (var i = 0; i < texts.Length; i++)
+            {
+                m_texts[i].gameObject.SetActive(true);
+                m_texts[i].text = texts[i];
+            }
         }
 
         public void SetInput(string input)
         {
+            DisableAllTexts();
+
             if (string.IsNullOrWhiteSpace(input))
-            {
-                text.text = "";
                 return;
-            }
+
+            string[] tokens = input.Split(' ');
 
             List<string> availablesCommands = new List<string>();
             foreach (var command in m_ncommands.Keys)
             {
-                if (command.Contains(input))
+                if(command == tokens[0])
+                    continue;
+
+                if (command.Contains(tokens[0]))
                 {
                     availablesCommands.Add(command);
                 }
             }
 
             if (availablesCommands.Count == 0)
-            {
-                text.text = "";
                 return;
+
+            List<string> finalCommands = new List<string>();
+            List<string> otherCommands = new List<string>();
+            foreach (var command in availablesCommands)
+            {
+                if (command.Substring(0, input.Length) == tokens[0])
+                {
+                    finalCommands.Add(command);
+                    continue;
+                }
+                otherCommands.Add(command);
             }
 
-            List<string> nearCommands = new List<string>();
-            foreach (var command in nearCommands)
+            if (finalCommands.Count < m_texts.Length)
             {
-
-                if (command.Substring(0, input.Length) == input)
+                for (var i = 0; i < otherCommands.Count; i++)
                 {
-                    print(command.Substring(0, input.Length));
-                    nearCommands.Add(command);
+                    if(finalCommands.Count == m_texts.Length)
+                        break;
+
+                    finalCommands.Add(otherCommands[i]);
                 }
             }
 
-            if (nearCommands.Count == 0)
-            {
-                text.text = availablesCommands[0];
-                return;
-            }
-
-            text.text = nearCommands[0];
+            SetTexts(finalCommands.ToArray());
+            m_mostProbableCommand = finalCommands.Count > 0 ? finalCommands[0] : "";
         }
+
+        public string MostProbableCommand => m_mostProbableCommand;
     }
 }

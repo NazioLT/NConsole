@@ -5,6 +5,7 @@ using UnityEngine;
 
 namespace Nazio_LT.Tools.Console
 {
+    [DefaultExecutionOrder(-100)]
     public class NConsole : Selectable, ISubmitHandler, IEventSystemHandler
     {
         [SerializeField] private NConsoleTheme m_theme = null;
@@ -67,10 +68,26 @@ namespace Nazio_LT.Tools.Console
 
         #endregion
 
+        internal void Tab()
+        {
+            string mostProbableCmd = m_autoCompletion.MostProbableCommand;
+
+            if (string.IsNullOrWhiteSpace(mostProbableCmd))
+                return;
+
+            m_terminal.text = mostProbableCmd;
+        }
+
         internal void ArrowInput(bool up)
         {
             if (m_sendCommand.Count == 0)
                 return;
+
+            if (!string.IsNullOrWhiteSpace(m_terminal.text))
+            {
+                // AUTOCOMPLETION ARROW
+                return;
+            }
 
             if (up)
             {
@@ -154,8 +171,6 @@ namespace Nazio_LT.Tools.Console
             }
 
             s_instance = this;
-
-            if (!Application.isPlaying) return;
 
             m_clearButton.onClick.AddListener(Clear);
             m_terminal.onSubmit.AddListener(EnterCommand);

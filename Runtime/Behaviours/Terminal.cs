@@ -34,7 +34,7 @@ namespace Nazio_LT.Tools.Console
 
             if (Input.GetKeyDown(KeyCode.Tab))
             {
-                Debug.Log("Tab");
+                NConsole.Instance.Tab();
             }
 
 #endif
