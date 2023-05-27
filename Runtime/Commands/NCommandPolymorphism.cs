@@ -17,7 +17,7 @@ namespace Nazio_LT.Tools.Console
             string result = "";
             foreach (var command in m_commands)
             {
-                result += "- " + command.ToString() + '\n';   
+                result += "- " + command.ToString() + '\n';
             }
 
             return result;
@@ -41,10 +41,15 @@ namespace Nazio_LT.Tools.Console
                 return false;
             }
 
-            foreach (var command in argumentCountedCommand)
+            foreach (NCommand command in argumentCountedCommand)
             {
                 if (command.AreArgumentsValid(tokens, out result))
-                    return true;
+                {
+                    if (command.HasValidTarget(ref result))
+                        return true;
+
+                    return false;
+                }
             }
 
             return false;

@@ -13,6 +13,7 @@ namespace Nazio_LT.Tools.Console
         internal MethodInfo Method;
         internal ParameterInfo[] ParameterInfos;
         internal bool UseSelectedObject;
+        private ExecutionType m_executionMode;
 
         public override string ToString()
         {
@@ -29,6 +30,41 @@ namespace Nazio_LT.Tools.Console
             string description = Attribute.Description == "" ? "" : (" : " + Attribute.Description);
 
             return commandText + description;
+        }
+
+        internal bool SetExecutionMode(ExecutionType executionMode)
+        {
+            m_executionMode = executionMode;
+
+            if (m_executionMode == ExecutionType.AllMonoBehaviourInstances)
+            {
+                if (Method.IsStatic)
+                {
+                    Debug.LogWarning($"The command : {ToString()}, can't be executed because {executionMode} doesn't support static Methods.");
+                    return false;
+                }
+
+                if (!typeof(MonoBehaviour).IsAssignableFrom(Method.ReflectedType))
+                {
+                    Debug.LogWarning($"The command : {ToString()}, can't be executed because {executionMode} methods must be in monobehaviour.");
+                    return false;
+                }
+            }
+
+            return true;
+        }
+
+        internal bool HasValidTarget(ref CommandContext result)
+        {
+            if(m_executionMode == ExecutionType.Static)
+                return true;
+
+            if(m_executionMode == ExecutionType.AllMonoBehaviourInstances)
+            {
+                object[] components = GameObject.FindObjectsOfType(Method.ReflectedType);
+                result.Targets = components;
+            }
+            return true;
         }
 
         internal bool AreArgumentsValid(string[] tokens, out CommandContext result)

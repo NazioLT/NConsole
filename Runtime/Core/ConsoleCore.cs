@@ -18,7 +18,7 @@ namespace Nazio_LT.Tools.Console
 
                 foreach (var type in types)
                 {
-                    MethodInfo[] methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public);
+                    MethodInfo[] methods = type.GetMethods(BindingFlags.Static | BindingFlags.Public | BindingFlags.Instance | BindingFlags.NonPublic);
                     foreach (var method in methods)
                     {
                         if (!method.IsDefined(typeof(NCommandAttribute))) continue;
@@ -35,6 +35,9 @@ namespace Nazio_LT.Tools.Console
                             ParameterInfos = parameterInfos,
                             UseSelectedObject = attribute.UseSelectedObject
                         };
+
+                        if(!command.SetExecutionMode(attribute.ExecutionMode))
+                            continue;
 
                         string key = command.Name;
 

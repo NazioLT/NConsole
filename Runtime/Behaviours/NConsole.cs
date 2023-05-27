@@ -6,7 +6,7 @@ using UnityEngine;
 namespace Nazio_LT.Tools.Console
 {
     [DefaultExecutionOrder(-100)]
-    public class NConsole : Selectable, ISubmitHandler, IEventSystemHandler
+    public sealed class NConsole : Selectable, ISubmitHandler, IEventSystemHandler
     {
         [SerializeField] private NConsoleTheme m_theme = null;
         [SerializeField] private Transform m_consoleContentParent = null;
