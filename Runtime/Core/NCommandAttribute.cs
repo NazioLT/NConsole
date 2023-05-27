@@ -6,6 +6,7 @@ namespace Nazio_LT.Tools.Console
     {
         Static = 0,
         AllMonoBehaviourInstances = 1,
+        SelectedObjectInstance = 2
     }
 
     [AttributeUsage(AttributeTargets.Method)]

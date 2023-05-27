@@ -48,15 +48,30 @@ namespace Nazio_LT.Tools.Console
 
         internal bool HasValidTarget(ref CommandContext result)
         {
-            if (m_executionMode == ExecutionType.Static)
-                return true;
-
-            if (m_executionMode == ExecutionType.AllMonoBehaviourInstances)
+            switch (m_executionMode)
             {
-                object[] components = GameObject.FindObjectsOfType(Method.ReflectedType);
-                result.Targets = components;
+                case ExecutionType.Static:
+                    return true;
+
+                case ExecutionType.AllMonoBehaviourInstances:
+                    {
+                        object[] components = GameObject.FindObjectsOfType(Method.ReflectedType);
+                        result.Targets = components;
+                        return components.Length > 0;
+                    }
+
+                case ExecutionType.SelectedObjectInstance:
+                    {
+                        if (!NConsole.Instance.TryGetSelectedGameObject(out GameObject selectedObject))
+                            return false;
+
+                        object component = selectedObject.GetComponent(Method.ReflectedType);
+                        result.SetUniqueTarget(component);
+                        return component != null;
+                    }
             }
-            return true;
+
+            return false;
         }
 
         internal bool AreArgumentsValid(string[] tokens, out CommandContext result)
