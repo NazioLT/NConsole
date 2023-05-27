@@ -17,16 +17,8 @@ namespace Nazio_LT.Tools.Console
 
         public override string ToString()
         {
-            string arguments = "";
-
-            for (var i = m_firstParamNameId; i < ParameterInfos.Length; i++)
-            {
-                var param = ParameterInfos[i];
-                arguments += $" ({param.ParameterType.ToString()}){param.Name}";
-            }
-
             string selectedObjectInfo = (UseSelectedObject ? "(SelectedObject)" : "");
-            string commandText = $"{selectedObjectInfo}{Name} {arguments}";
+            string commandText = $"{selectedObjectInfo}{DisplayName}";
             string description = Attribute.Description == "" ? "" : (" : " + Attribute.Description);
 
             return commandText + description;
@@ -56,10 +48,10 @@ namespace Nazio_LT.Tools.Console
 
         internal bool HasValidTarget(ref CommandContext result)
         {
-            if(m_executionMode == ExecutionType.Static)
+            if (m_executionMode == ExecutionType.Static)
                 return true;
 
-            if(m_executionMode == ExecutionType.AllMonoBehaviourInstances)
+            if (m_executionMode == ExecutionType.AllMonoBehaviourInstances)
             {
                 object[] components = GameObject.FindObjectsOfType(Method.ReflectedType);
                 result.Targets = components;
@@ -116,7 +108,20 @@ namespace Nazio_LT.Tools.Console
             return true;
         }
 
+        private string GetArgumentDisplayName()
+        {
+            string arguments = "";
+
+            for (var i = m_firstParamNameId; i < ParameterInfos.Length; i++)
+            {
+                var param = ParameterInfos[i];
+                arguments += $" ({param.ParameterType.ToString()}){param.Name}";
+            }
+            return arguments;
+        }
+
         public int ExpectedArgumentCount => ParameterInfos.Length - m_firstParamNameId;
+        public string DisplayName => $"{Name} {GetArgumentDisplayName()}";
 
         private int m_firstParamNameId => UseSelectedObject ? 1 : 0;
     }

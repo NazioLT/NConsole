@@ -55,12 +55,22 @@ namespace Nazio_LT.Tools.Console
             return false;
         }
 
-        private readonly List<NCommand> GetAllArgumentCountValidCommands(int argumentCount)
+        internal List<NCommand> GetAllArgumentCountValidCommands(int argumentCount)
+        {
+            return GetAllWithCondtion((command) => command.ExpectedArgumentCount == argumentCount);
+        }
+
+        internal List<NCommand> GetAllWithMinimumArgumentCount(int minimumArgumentCount)
+        {
+            return GetAllWithCondtion((command) => command.ExpectedArgumentCount >= minimumArgumentCount);
+        }
+
+        private List<NCommand> GetAllWithCondtion(System.Func<NCommand, bool> conditionCall)
         {
             List<NCommand> argumentCountedCommand = new List<NCommand>();
-            foreach (var command in m_commands)
+            foreach (NCommand command in m_commands)
             {
-                if (command.ExpectedArgumentCount == argumentCount)
+                if (conditionCall(command))
                 {
                     argumentCountedCommand.Add(command);
                 }

@@ -20,9 +20,18 @@ namespace Nazio_LT.Tools.Console
                 return;
 
             string[] tokens = ConsoleCore.GetTokens(input);
-            
-            if(!GetCommandPropositions(tokens, out string[] propositions))
-                return;
+            string[] propositions = null;
+
+            if (tokens.Length == 1 && input[input.Length - 1] != ' ')//Search per character
+            {
+                if (!GetCommandPropositions(tokens, out propositions))
+                    return;
+            }
+            else
+            {
+                if (!GetCommandPropositionsStrict(tokens, out propositions))
+                    return;
+            }
 
             SetPropositionTexts(propositions);
             m_mostProbableCommand = propositions.Length > 0 ? propositions[0] : "";
@@ -51,12 +60,34 @@ namespace Nazio_LT.Tools.Console
             }
         }
 
+        private bool GetCommandPropositionsStrict(string[] tokens, out string[] propositions)
+        {
+            propositions = null;
+
+            if(!m_ncommands.ContainsKey(tokens[0]))
+                return false;
+
+            NCommandPolymorphism polymorphism = m_ncommands[tokens[0]];
+            List<NCommand> commands = polymorphism.GetAllWithMinimumArgumentCount(tokens.Length - 1);
+
+            if(commands == null || commands.Count == 0)
+                return false;
+
+            propositions = new string[commands.Count];
+            for (var i = 0; i < commands.Count; i++)
+            {
+                propositions[i] = commands[i].DisplayName;
+            }
+
+            return true;
+        }
+
         private bool GetCommandPropositions(string[] tokens, out string[] propositions)
         {
             propositions = new string[0];
 
             List<string> availablesCommands = new List<string>();
-            foreach (var command in m_ncommands.Keys)
+            foreach (string command in m_ncommands.Keys)
             {
                 if (command == tokens[0])
                     continue;
@@ -73,7 +104,7 @@ namespace Nazio_LT.Tools.Console
             //Trie les meilleurs commandes.
             List<string> finalCommands = new List<string>();
             List<string> otherCommands = new List<string>();
-            foreach (var command in availablesCommands)
+            foreach (string command in availablesCommands)
             {
                 if (command.Substring(0, tokens[0].Length) == tokens[0])
                 {
