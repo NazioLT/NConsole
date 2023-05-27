@@ -1,5 +1,8 @@
 namespace Nazio_LT.Tools.Console
 {
+    /// <summary>
+    /// Define the message display.
+    /// </summary>
     internal struct ConsoleMessage
     {
         public ConsoleMessage(NLogType logType, string message)

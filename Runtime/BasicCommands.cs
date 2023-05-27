@@ -27,7 +27,7 @@ namespace Nazio_LT.Tools.Console
         }
 
         [NCommand(Description = "Clear the console.")]
-        public static void Clear() => NConsole.Instance.Clear();
+        public static void Clear() => NConsole.Instance.ClearConsole();
 
         [NCommand]
         public static void GetSceneHierarchy()

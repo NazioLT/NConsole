@@ -2,6 +2,7 @@ using System.Reflection;
 
 namespace Nazio_LT.Tools.Console
 {
+    /// <summary>Describe a command.</summary>
     internal struct CommandContext
     {
         internal CommandContext(MethodInfo method, int argumentCount)

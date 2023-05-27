@@ -26,6 +26,7 @@ namespace Nazio_LT.Tools.Console
         private int m_sendCommandId = 0;
         private string m_writedLine = "";
 
+        //Use by commands
         private GameObject m_selectedObject = null;
 
         #region Public
@@ -47,7 +48,7 @@ namespace Nazio_LT.Tools.Console
             HandleLog(message, "", NLogType.Error);
         }
 
-        public void Clear()
+        public void ClearConsole()
         {
             if (m_messages == null || m_messages.Count == 0) return;
 
@@ -79,6 +80,8 @@ namespace Nazio_LT.Tools.Console
         }
 
         #endregion
+
+        #region Inputs
 
         internal void Tab()
         {
@@ -129,6 +132,8 @@ namespace Nazio_LT.Tools.Console
             m_terminal.text = m_sendCommand[m_sendCommandId];
         }
 
+        #endregion
+
         internal void UserMessage(string message)
         {
             HandleLog(message, "", NLogType.User);
@@ -173,7 +178,7 @@ namespace Nazio_LT.Tools.Console
 
             s_instance = this;
 
-            m_clearButton.onClick.AddListener(Clear);
+            m_clearButton.onClick.AddListener(ClearConsole);
             m_terminal.onSubmit.AddListener(EnterCommand);
             m_terminal.onValueChanged.AddListener(OnInputFieldValueChange);
 
@@ -215,7 +220,7 @@ namespace Nazio_LT.Tools.Console
 
             NCommandPolymorphism command = m_ncommands[commandText];
 
-            if (command.HasValidMethod(tokens, out CommandContext result))
+            if (command.HasValidCommand(tokens, out CommandContext result))
             {
                 result.Invoke();
                 return;

@@ -5,7 +5,7 @@ using UnityEngine;
 
 namespace Nazio_LT.Tools.Console
 {
-    internal static class ConsoleCore
+    internal static partial class ConsoleCore
     {
         internal static Dictionary<string, NCommandPolymorphism> GetAllNCommands()
         {
@@ -98,52 +98,20 @@ namespace Nazio_LT.Tools.Console
             if (argumentType == typeof(string))
             {
                 value = token;
-
                 return true;
             }
 
             if (argumentType == typeof(int))
-            {
-                bool valid = int.TryParse(token, out int output);
-                value = output;
-
-                return valid;
-            }
+                return TokenChecker.IsIntValid(token, out value);
 
             if (argumentType == typeof(float))
-            {
-                bool valid = float.TryParse(token, out float output);
-                value = output;
-
-                return valid;
-            }
+                return TokenChecker.IsFloatValid(token, out value);
 
             if (argumentType == typeof(bool))
-            {
-                token = token.ToLower();
-                value = token == "true";
-
-                return token == "false" || token == "true";
-            }
+                return TokenChecker.IsBoolValid(token, out value);
 
             if (argumentType == typeof(Vector3))
-            {
-                string[] argsTokens = token.Split(',');
-                value = new Vector3();
-
-                if (argsTokens.Length != 3)
-                {
-                    return false;
-                }
-
-                if (float.TryParse(argsTokens[0], out float x) && float.TryParse(argsTokens[1], out float y) && float.TryParse(argsTokens[2], out float z))
-                {
-                    value = new Vector3(x, y, z);
-                    return true;
-                }
-
-                return false;
-            }
+                return TokenChecker.IsVector3Valid(token, out value);
 
             value = null;
             return false;

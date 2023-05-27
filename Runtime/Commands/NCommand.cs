@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Nazio_LT.Tools.Console
 {
+    /// <summary>
+    /// All data of a command.
+    /// </summary>
     internal struct NCommand
     {
         internal string Name;
@@ -28,7 +31,7 @@ namespace Nazio_LT.Tools.Console
             return commandText + description;
         }
 
-        internal bool IsArgumentsValid(string[] tokens, out CommandContext result)
+        internal bool AreArgumentsValid(string[] tokens, out CommandContext result)
         {
             int unUsedArgCount = m_firstParamNameId + 1;
             int cmdArgsCount = tokens.Length - unUsedArgCount;
@@ -38,6 +41,30 @@ namespace Nazio_LT.Tools.Console
             if (ParameterInfos.Length == 0 && cmdArgsCount == 0)
                 return true;
 
+            if (!EachArgumentsAreCorrect(tokens, ref result))
+                return false;
+
+            if (UseSelectedObject && !HasValidGameObjectSelected(ref result))
+                return false;
+
+            return true;
+        }
+
+        private bool HasValidGameObjectSelected(ref CommandContext result)
+        {
+            if (!NConsole.Instance.TryGetSelectedGameObject(out GameObject obj))
+            {
+                result.Error = "No Object Selected. Type : Select 'ObjectName' to select an object.";
+                result.OtherCommandsPurposes = false;
+                return false;
+            }
+
+            result.Arguments[0] = obj;
+            return true;
+        }
+
+        private bool EachArgumentsAreCorrect(string[] tokens, ref CommandContext result)
+        {
             int tokenIDDelta = 1 - m_firstParamNameId;
             for (int i = m_firstParamNameId; i < ParameterInfos.Length; i++)
             {
@@ -48,18 +75,6 @@ namespace Nazio_LT.Tools.Console
                 }
 
                 result.Arguments[i] = argument;
-            }
-
-            if (UseSelectedObject)
-            {
-                if (!NConsole.Instance.TryGetSelectedGameObject(out GameObject obj))
-                {
-                    result.Error = "No Object Selected. Type : Select 'ObjectName' to select an object.";
-                    result.OtherCommandsPurposes = false;
-                    return false;
-                }
-
-                result.Arguments[0] = obj;
             }
 
             return true;
