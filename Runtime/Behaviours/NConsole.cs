@@ -90,21 +90,33 @@ namespace Nazio_LT.Tools.Console
             if (string.IsNullOrWhiteSpace(mostProbableCmd))
                 return;
 
+            m_terminal.text += ' ';
+
             m_terminal.text = mostProbableCmd;
             m_terminal.MoveTextEnd(false);
         }
 
         internal void ArrowInput(bool up)
         {
-            if (m_sendCommand.Count == 0)
-                return;
-
             if (!string.IsNullOrWhiteSpace(m_terminal.text))
             {
-                // AUTOCOMPLETION ARROW
+                AutoCompletionArrowInput(up);
                 return;
             }
 
+            if (m_sendCommand.Count == 0)
+                return;
+
+            HistoricCommandArrowInput(up);
+        }
+
+        private void AutoCompletionArrowInput(bool up)
+        {
+            m_autoCompletion.ArrowInput(up);
+        }
+
+        private void HistoricCommandArrowInput(bool up)
+        {
             if (up)
             {
                 if (m_sendCommandId == 0)
@@ -252,7 +264,6 @@ namespace Nazio_LT.Tools.Console
 
         private void OnInputFieldValueChange(string text)
         {
-            // m_sendCommandId = m_sendCommand.Count;
             m_autoCompletion.SetInput(text);
         }
 

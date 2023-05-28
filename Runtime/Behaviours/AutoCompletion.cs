@@ -1,20 +1,22 @@
 using System.Collections.Generic;
 using UnityEngine;
-using TMPro;
 
 namespace Nazio_LT.Tools.Console
 {
     public class AutoCompletion : MonoBehaviour
     {
-        [SerializeField] private TextMeshProUGUI[] m_texts = null;
+        [SerializeField] private AutoCompletionText[] m_texts = null;
 
-        private string m_mostProbableCommand = "";
+        private string[] m_propositions = null;
+        private int m_selectedPropositionID = -1;
+        private bool m_canChooseProposition = false;
 
         private Dictionary<string, NCommandPolymorphism> m_ncommands = new Dictionary<string, NCommandPolymorphism>();
 
         public void SetInput(string input)
         {
             DisableAllTexts();
+            SelectProposition(-1);
 
             if (string.IsNullOrWhiteSpace(input))
                 return;
@@ -33,8 +35,14 @@ namespace Nazio_LT.Tools.Console
                     return;
             }
 
+            m_propositions = propositions;
             SetPropositionTexts(propositions);
-            m_mostProbableCommand = propositions.Length > 0 ? propositions[0] : "";
+            SelectProposition(0);
+        }
+
+        internal void ArrowInput(bool up)
+        {
+            SelectProposition(m_selectedPropositionID + (up ? 1 : -1));
         }
 
         private void Start()
@@ -51,12 +59,35 @@ namespace Nazio_LT.Tools.Console
             }
         }
 
+        private void UnSelectAllTexts()
+        {
+            foreach (var text in m_texts)
+            {
+                text.Select(false);
+            }
+        }
+
+        private void SelectProposition(int id)
+        {
+            UnSelectAllTexts();
+
+            if(m_propositions == null)
+                return;
+
+            m_selectedPropositionID = Mathf.Clamp(id, -1, m_propositions.Length - 1);
+
+            if (m_selectedPropositionID == -1)
+                return;
+
+            m_texts[m_selectedPropositionID].Select(true);
+        }
+
         private void SetPropositionTexts(string[] texts)
         {
             for (var i = 0; i < texts.Length; i++)
             {
                 m_texts[i].gameObject.SetActive(true);
-                m_texts[i].text = texts[i];
+                m_texts[i].LinkCommand(texts[i]);
             }
         }
 
@@ -64,13 +95,13 @@ namespace Nazio_LT.Tools.Console
         {
             propositions = null;
 
-            if(!m_ncommands.ContainsKey(tokens[0]))
+            if (!m_ncommands.ContainsKey(tokens[0]))
                 return false;
 
             NCommandPolymorphism polymorphism = m_ncommands[tokens[0]];
             List<NCommand> commands = polymorphism.GetAllWithMinimumArgumentCount(tokens.Length - 1);
 
-            if(commands == null || commands.Count == 0)
+            if (commands == null || commands.Count == 0)
                 return false;
 
             propositions = new string[commands.Count];
@@ -130,6 +161,8 @@ namespace Nazio_LT.Tools.Console
             return true;
         }
 
-        public string MostProbableCommand => m_mostProbableCommand;
+        public string MostProbableCommand => m_selectedPropositionID == -1 ? "" : m_texts[m_selectedPropositionID].text;
+
+        public bool CanChooseProposition { get => m_canChooseProposition; set => m_canChooseProposition = value; }
     }
 }
