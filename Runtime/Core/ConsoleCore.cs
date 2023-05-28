@@ -36,7 +36,7 @@ namespace Nazio_LT.Tools.Console
                             UseSelectedObject = attribute.UseSelectedObject
                         };
 
-                        if(!command.SetExecutionMode(attribute.ExecutionMode))
+                        if (!command.SetExecutionMode(attribute.ExecutionMode))
                             continue;
 
                         string key = command.Name;
@@ -85,9 +85,9 @@ namespace Nazio_LT.Tools.Console
             List<string> goodTokens = new List<string>();
             foreach (var item in tokens)
             {
-                if(string.IsNullOrWhiteSpace(item))
+                if (string.IsNullOrWhiteSpace(item))
                     continue;
-                
+
                 goodTokens.Add(item);
             }
 
@@ -113,8 +113,17 @@ namespace Nazio_LT.Tools.Console
             if (argumentType == typeof(bool))
                 return TokenChecker.IsBoolValid(token, out value);
 
+            if (argumentType == typeof(Vector4))
+                return TokenChecker.IsVector4Valid(token, out value);
+
             if (argumentType == typeof(Vector3))
                 return TokenChecker.IsVector3Valid(token, out value);
+
+            if (argumentType == typeof(Vector2))
+                return TokenChecker.IsVector2Valid(token, out value);
+
+            if (argumentType == typeof(Color))
+                return TokenChecker.IsColorValid(token, out value);
 
             value = null;
             return false;
