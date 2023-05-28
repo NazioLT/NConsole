@@ -69,5 +69,34 @@ namespace Nazio_LT.Tools.Console
             Debug.Log($"{ConsoleCore.GetGameObjectPath(selectedObject)} moved to : {position}.");
             selectedObject.transform.position = position;
         }
+
+        [NCommand(UseSelectedObject = true)]
+        public static void HelpOnSelected(GameObject selectedObject)
+        {
+            Component[] comps = selectedObject.GetComponents<MonoBehaviour>();
+            List<NCommand> instancesCommands = new List<NCommand>();
+
+
+            foreach (var commandGroup in NConsole.Instance.Ncommands.Values)
+            {
+                foreach (var command in commandGroup.Commands)
+                {
+                    if(command.ExecutionMode == ExecutionType.SelectedObjectInstance)
+                        instancesCommands.Add(command);
+                }
+            }
+
+            string allCmdList = "CMD : ";
+            foreach (var component in comps)
+            {
+                foreach (var command in instancesCommands)
+                {
+                    if(command.TypeOn == component.GetType())
+                        allCmdList += command.DisplayName + '\n';
+                }
+            }
+
+            Debug.Log(allCmdList);
+        }
     }
 }

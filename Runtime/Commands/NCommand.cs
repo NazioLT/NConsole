@@ -137,6 +137,8 @@ namespace Nazio_LT.Tools.Console
 
         public int ExpectedArgumentCount => ParameterInfos.Length - m_firstParamNameId;
         public string DisplayName => $"{Name} {GetArgumentDisplayName()}";
+        public System.Type TypeOn => Method?.ReflectedType;
+        public ExecutionType ExecutionMode => m_executionMode;
 
         private int m_firstParamNameId => UseSelectedObject ? 1 : 0;
     }

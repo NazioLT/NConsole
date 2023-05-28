@@ -78,5 +78,7 @@ namespace Nazio_LT.Tools.Console
 
             return argumentCountedCommand;
         }
+
+        public NCommand[] Commands => m_commands.ToArray();
     }
 }
