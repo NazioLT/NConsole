@@ -75,6 +75,9 @@ namespace Nazio_LT.Tools.Console
                 return true;
             }
 
+            /// <summary>
+            /// Usage : Color(Vector)
+            /// </summary>
             public static bool IsColorValid(string token, out object value)
             {
                 value = null;

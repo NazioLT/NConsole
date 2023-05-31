@@ -2,6 +2,10 @@ using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
 
+#if ENABLE_INPUT_SYSTEM
+using UnityEngine.InputSystem;
+#endif
+
 namespace Nazio_LT.Tools.Console
 {
     public class Terminal : TMPro.TMP_InputField
@@ -10,25 +14,34 @@ namespace Nazio_LT.Tools.Console
         {
             base.OnUpdateSelected(eventData);
 
-            // eventData.currentInputModule
-
 #if ENABLE_INPUT_SYSTEM
 
-            Debug.Log("New Input System");
-
-#else
-
-            // Debug.Log("Old Input System");
-
-            if (Input.GetKeyDown(KeyCode.UpArrow))
+            if (Keyboard.current[Key.UpArrow].wasPressedThisFrame)
             {
                 // Debug.Log("UP");
                 NConsole.Instance.ArrowInput(true);
             }
 
-            if (Input.GetKeyDown(KeyCode.DownArrow))
+            if (Keyboard.current[Key.DownArrow].wasPressedThisFrame)
             {
                 // Debug.Log("DOWN");
+                NConsole.Instance.ArrowInput(false);
+            }
+
+            if (Keyboard.current[Key.Tab].wasPressedThisFrame)
+            {
+                NConsole.Instance.Tab();
+            }
+
+#else
+
+            if (Input.GetKeyDown(KeyCode.UpArrow))
+            {
+                NConsole.Instance.ArrowInput(true);
+            }
+
+            if (Input.GetKeyDown(KeyCode.DownArrow))
+            {
                 NConsole.Instance.ArrowInput(false);
             }
 
