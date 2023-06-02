@@ -15,7 +15,12 @@ namespace Nazio_LT.Tools.Console
         [SerializeField] private Terminal m_terminal = null;
         [SerializeField] private AutoCompletion m_autoCompletion = null;
 
+        [SerializeField] private List<Image> m_backElements = new();
+
         private static NConsole s_instance = null;
+        
+        //References
+        private Image m_terminalBack = null;
 
         //Commands
         private List<NLog> m_messages = new List<NLog>();
@@ -176,6 +181,8 @@ namespace Nazio_LT.Tools.Console
                 return;
             }
 
+            m_terminalBack = m_terminal.GetComponent<Image>();
+
             ApplyTheme();
 
             base.Start();
@@ -190,6 +197,7 @@ namespace Nazio_LT.Tools.Console
 
             s_instance = this;
 
+
             m_clearButton.onClick.AddListener(ClearConsole);
             m_terminal.onSubmit.AddListener(EnterCommand);
             m_terminal.onValueChanged.AddListener(OnInputFieldValueChange);
@@ -202,7 +210,19 @@ namespace Nazio_LT.Tools.Console
 
         private void ApplyTheme()
         {
+            foreach (var message in m_messages)
+            {
+                message.UpdateTheme(m_theme);
+            }
 
+            foreach (var element in m_backElements)
+            {
+                element.color = m_theme.BackColor;
+            }
+
+            m_terminalBack.color = m_theme.TerminalBackColor;
+            m_terminal.textComponent.color = m_theme.TerminalTextColor;
+            m_terminal.placeholder.color = m_theme.TerminalPlaceHolderColor;
         }
 
         private void EnterCommand(string input)

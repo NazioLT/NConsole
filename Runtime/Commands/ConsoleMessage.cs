@@ -9,20 +9,26 @@ namespace Nazio_LT.Tools.Console
         {
             LogType = logType;
 
-            LogInfos = NConsole.Instance.Theme.MessageTypeFactory(logType);
+            m_logFormat = NConsole.Instance.Theme.MessageTypeFactory(logType);
             Message = message;
-            FormattedMessage = $"[{LogInfos.Prefix}] : {message}";
+            FormattedMessage = $"[{m_logFormat.Prefix}] : {message}";
         }
 
+        private LogFormatInfos m_logFormat;
+
         public readonly NLogType LogType;
-        public readonly LogInfos LogInfos;
         public readonly string Message;
         public readonly string FormattedMessage;
         
         public void FormatText(TMPro.TextMeshProUGUI text)
         {
             text.text = FormattedMessage;
-            text.color = LogInfos.Color;
+            text.color = m_logFormat.Color;
+        }
+
+        public void SetFormat(LogFormatInfos format)
+        {
+            m_logFormat = format;
         }
     }
 }

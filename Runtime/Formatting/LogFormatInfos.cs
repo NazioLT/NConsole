@@ -14,9 +14,9 @@ namespace Nazio_LT.Tools.Console
     }
 
     [System.Serializable]
-    public struct LogInfos
+    public struct LogFormatInfos
     {
-        public LogInfos(Color color, string prefix)
+        public LogFormatInfos(Color color, string prefix)
         {
             m_Color = color;
             Prefix = prefix;

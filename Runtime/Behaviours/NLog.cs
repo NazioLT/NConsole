@@ -14,5 +14,13 @@ namespace Nazio_LT.Tools.Console
             m_message = message;
             message.FormatText(m_logText);
         }
+
+        internal void UpdateTheme(NConsoleTheme theme)
+        {
+            LogFormatInfos format = theme.MessageTypeFactory(m_message.LogType);
+            m_message.SetFormat(format);
+
+            Format(m_message);
+        }
     }
 }
