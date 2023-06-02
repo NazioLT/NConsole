@@ -1,4 +1,5 @@
 using UnityEngine;
+using TMPro;
 
 namespace Nazio_LT.Tools.Console
 {
@@ -20,12 +21,15 @@ namespace Nazio_LT.Tools.Console
         {
             m_Color = color;
             Prefix = prefix;
+            m_fontStyles = FontStyles.Normal;
         }
 
         [SerializeField] private Color m_Color;
+        [SerializeField] private FontStyles m_fontStyles;
 
         public readonly string Prefix;
         
         public Color Color => m_Color;
+        public FontStyles FontStyles => m_fontStyles;
     }
 }

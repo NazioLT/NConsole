@@ -24,6 +24,7 @@ namespace Nazio_LT.Tools.Console
         {
             text.text = FormattedMessage;
             text.color = m_logFormat.Color;
+            text.fontStyle = m_logFormat.FontStyles;
         }
 
         public void SetFormat(LogFormatInfos format)

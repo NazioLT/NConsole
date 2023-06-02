@@ -26,8 +26,8 @@ MonoBehaviour:
     m_Color: {r: 0, g: 1, b: 1, a: 1}
   UserFormat:
     m_Color: {r: 1, g: 1, b: 1, a: 1}
-  m_backColor: {r: 0, g: 0, b: 0, a: 0.7}
+  m_backColor: {r: 0, g: 0, b: 0, a: 0.8}
   m_terminalTextColor: {r: 1, g: 1, b: 1, a: 1}
-  m_uiColor: {r: 1, g: 1, b: 1, a: 1}
-  m_uiVariantColor: {r: 0.5, g: 0.5, b: 0.5, a: 1}
-  m_uiTextColor: {r: 0, g: 0, b: 0, a: 1}
+  m_uiColor: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 1}
+  m_uiVariantColor: {r: 0.1981132, g: 0.1981132, b: 0.1981132, a: 1}
+  m_uiTextColor: {r: 1, g: 1, b: 1, a: 1}
