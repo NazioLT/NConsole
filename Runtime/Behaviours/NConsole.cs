@@ -15,12 +15,11 @@ namespace Nazio_LT.Tools.Console
         [SerializeField] private Terminal m_terminal = null;
         [SerializeField] private AutoCompletion m_autoCompletion = null;
 
-        [SerializeField] private List<Image> m_backElements = new();
-
         private static NConsole s_instance = null;
-        
+
         //References
         private Image m_terminalBack = null;
+        private Image m_consoleBack = null;
 
         //Commands
         private List<NLog> m_messages = new List<NLog>();
@@ -57,10 +56,7 @@ namespace Nazio_LT.Tools.Console
         {
             if (m_messages == null || m_messages.Count == 0) return;
 
-            for (int i = 0; i < m_messages.Count; i++)
-            {
-                Destroy(m_messages[i].gameObject);
-            }
+
 
             m_messages.Clear();
         }
@@ -182,6 +178,7 @@ namespace Nazio_LT.Tools.Console
             }
 
             m_terminalBack = m_terminal.GetComponent<Image>();
+            m_consoleBack = GetComponentInChildren<ScrollRect>().GetComponent<Image>();
 
             ApplyTheme();
 
@@ -210,19 +207,11 @@ namespace Nazio_LT.Tools.Console
 
         private void ApplyTheme()
         {
-            foreach (var message in m_messages)
+            NConsoleThemeBehaviour[] objectsToColor = GetComponentsInChildren<NConsoleThemeBehaviour>();
+            foreach (var obj in objectsToColor)
             {
-                message.UpdateTheme(m_theme);
+                obj.ApplyTheme(m_theme);
             }
-
-            foreach (var element in m_backElements)
-            {
-                element.color = m_theme.BackColor;
-            }
-
-            m_terminalBack.color = m_theme.TerminalBackColor;
-            m_terminal.textComponent.color = m_theme.TerminalTextColor;
-            m_terminal.placeholder.color = m_theme.TerminalPlaceHolderColor;
         }
 
         private void EnterCommand(string input)

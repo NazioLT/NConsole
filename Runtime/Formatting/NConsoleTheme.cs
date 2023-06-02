@@ -48,16 +48,18 @@ namespace Nazio_LT.Tools.Console
             "User"
         );
 
-        [Header("Elements")]
+        [Header("Console")]
         [SerializeField] private Color m_backColor = new Color(0, 0, 0, 0.7f);
-
-        [Header("Terminal")]
-        [SerializeField] private Color m_terminalBackColor = new Color(0, 0, 0, 0.7f);
         [SerializeField] private Color m_terminalTextColor = Color.white;
+        [Space]
+        [SerializeField] private Color m_uiColor = Color.white;
+        [SerializeField] private Color m_uiVariantColor = Color.gray;
+        [SerializeField] private Color m_uiTextColor = Color.black;
 
-        public Color BackColor => m_backColor;
-
-        public Color TerminalBackColor => m_terminalBackColor;
+        public Color TerminalBackColor => m_backColor;
+        public Color UIColor => m_uiColor;
+        public Color UIVariantColor => m_uiVariantColor;
+        public Color UITextColor => m_uiTextColor;
         public Color TerminalTextColor => m_terminalTextColor;
         public Color TerminalPlaceHolderColor => new Color(TerminalTextColor.r, TerminalTextColor.g, TerminalTextColor.b, 0.6f);
 

@@ -16,7 +16,6 @@ namespace Nazio_LT.Tools.Console.NEditor
         private SerializedProperty m_clearButton;
         private SerializedProperty m_terminal;
         private SerializedProperty m_autoCompletion;
-        private SerializedProperty m_backElements;
 
         public override void OnInspectorGUI()
         {
@@ -37,7 +36,6 @@ namespace Nazio_LT.Tools.Console.NEditor
             EditorGUILayout.PropertyField(m_terminal);
             EditorGUILayout.PropertyField(m_autoCompletion);
             EditorGUILayout.PropertyField(m_textPrefab);
-            EditorGUILayout.PropertyField(m_backElements);
 
             serializedObject.ApplyModifiedProperties();
         }
@@ -51,7 +49,6 @@ namespace Nazio_LT.Tools.Console.NEditor
             m_clearButton = serializedObject.FindProperty("m_clearButton");
             m_terminal = serializedObject.FindProperty("m_terminal");
             m_autoCompletion = serializedObject.FindProperty("m_autoCompletion");
-            m_backElements = serializedObject.FindProperty("m_backElements");
         }
     }
 }
