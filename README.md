@@ -8,6 +8,7 @@ NConsole is an in-game command console wich help you to easily debug your game.
 * Add your own commands.
 * Autocompletion.
 * Command history.
+* Theme Customization.
 
 ### Commands : 
 * Enum support

@@ -19,7 +19,7 @@ namespace Nazio_LT.Tools.Console.NEditor
             serializedObject.Update();
 
             EditorGUILayout.LabelField("Theme", EditorStyles.boldLabel);
-            
+
             EditorGUILayout.PropertyField(m_theme);
 
 
@@ -47,6 +47,7 @@ namespace Nazio_LT.Tools.Console.NEditor
             m_terminal = serializedObject.FindProperty("m_terminal");
             m_autoCompletion = serializedObject.FindProperty("m_autoCompletion");
         }
+
     }
 }
 #endif
