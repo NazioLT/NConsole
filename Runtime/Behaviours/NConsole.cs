@@ -26,9 +26,7 @@ namespace Nazio_LT.Tools.Console
         private Dictionary<string, NCommandPolymorphism> m_ncommands = new Dictionary<string, NCommandPolymorphism>();
 
         //Typed Commands
-        private List<string> m_sendCommand = new List<string>();
-        private int m_sendCommandId = 0;
-        private string m_writedLine = "";
+        private ConsoleHistory m_history = new ConsoleHistory();
 
         //Use by commands
         private GameObject m_selectedObject = null;
@@ -99,50 +97,20 @@ namespace Nazio_LT.Tools.Console
 
         internal void ArrowInput(bool up)
         {
-            if (!string.IsNullOrWhiteSpace(m_terminal.text))
+            bool hasWrited = !string.IsNullOrWhiteSpace(m_terminal.text) && m_history.GetCurrent() != m_terminal.text;
+
+            if (hasWrited)
             {
                 AutoCompletionArrowInput(up);
                 return;
             }
 
-            if (m_sendCommand.Count == 0)
-                return;
-
-            HistoricCommandArrowInput(up);
+            m_terminal.text = m_history.ChangeSelectedMessageID(up);
         }
 
         private void AutoCompletionArrowInput(bool up)
         {
             m_autoCompletion.ArrowInput(up);
-        }
-
-        private void HistoricCommandArrowInput(bool up)
-        {
-            if (up)
-            {
-                if (m_sendCommandId == 0)
-                    return;
-
-                if (m_sendCommandId >= m_sendCommand.Count)
-                {
-                    m_writedLine = m_terminal.text;
-                }
-
-                m_sendCommandId--;
-            }
-            else
-            {
-                m_sendCommandId++;
-
-                if (m_sendCommandId >= m_sendCommand.Count)
-                {
-                    m_terminal.text = m_writedLine;
-                    m_sendCommandId = m_sendCommand.Count;
-                    return;
-                }
-            }
-
-            m_terminal.text = m_sendCommand[m_sendCommandId];
         }
 
         #endregion
@@ -224,8 +192,7 @@ namespace Nazio_LT.Tools.Console
             if (input == "") return;
 
             UserMessage(input);
-            m_sendCommand.Add(input);
-            m_sendCommandId = m_sendCommand.Count;
+            m_history.Add(input);
 
             m_terminal.text = "";
 

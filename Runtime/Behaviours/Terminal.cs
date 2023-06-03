@@ -18,13 +18,11 @@ namespace Nazio_LT.Tools.Console
 
             if (Keyboard.current[Key.UpArrow].wasPressedThisFrame)
             {
-                // Debug.Log("UP");
                 NConsole.Instance.ArrowInput(true);
             }
 
             if (Keyboard.current[Key.DownArrow].wasPressedThisFrame)
             {
-                // Debug.Log("DOWN");
                 NConsole.Instance.ArrowInput(false);
             }
 
