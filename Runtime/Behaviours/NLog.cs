@@ -3,8 +3,11 @@ using TMPro;
 
 namespace Nazio_LT.Tools.Console
 {
+    /// <summary>
+    /// Representation of a log.
+    /// </summary>
     public class NLog : MonoBehaviour
-    {   
+    {
         [SerializeField] private TextMeshProUGUI m_logText = null;
 
         private ConsoleMessage m_message;

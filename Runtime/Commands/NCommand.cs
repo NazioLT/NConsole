@@ -4,7 +4,7 @@ using UnityEngine;
 namespace Nazio_LT.Tools.Console
 {
     /// <summary>
-    /// All data of a command.
+    /// All data of a registered command.
     /// </summary>
     internal struct NCommand
     {

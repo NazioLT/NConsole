@@ -2,6 +2,9 @@ using System.Collections.Generic;
 
 namespace Nazio_LT.Tools.Console
 {
+    /// <summary>
+    /// Define a group of commands which have the same name.
+    /// </summary>
     internal struct NCommandPolymorphism
     {
         internal NCommandPolymorphism(NCommand command)
@@ -17,7 +20,7 @@ namespace Nazio_LT.Tools.Console
             string result = "";
             foreach (var command in m_commands)
             {
-                result += "- " + command.ToString() + '\n';
+                result += '\n' + "- " + command.ToString();
             }
 
             return result;

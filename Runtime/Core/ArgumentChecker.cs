@@ -8,7 +8,7 @@ namespace Nazio_LT.Tools.Console
 
         private static class TokenChecker
         {
-            public static bool IsIntValid(string token, out object value)
+            internal static bool IsIntValid(string token, out object value)
             {
                 bool valid = int.TryParse(token, out int output);
                 value = output;
@@ -16,7 +16,7 @@ namespace Nazio_LT.Tools.Console
                 return valid;
             }
 
-            public static bool IsFloatValid(string token, out object value)
+            internal static bool IsFloatValid(string token, out object value)
             {
                 bool valid = float.TryParse(token, out float output);
                 value = output;
@@ -24,7 +24,7 @@ namespace Nazio_LT.Tools.Console
                 return valid;
             }
 
-            public static bool IsBoolValid(string token, out object value)
+            internal static bool IsBoolValid(string token, out object value)
             {
                 token = token.ToLower();
                 value = token == "true";
@@ -32,7 +32,7 @@ namespace Nazio_LT.Tools.Console
                 return token == "false" || token == "true";
             }
 
-            public static bool IsVector4Valid(string token, out object value)
+            internal static bool IsVector4Valid(string token, out object value)
             {
                 value = null;
 
@@ -44,7 +44,7 @@ namespace Nazio_LT.Tools.Console
                 return true;
             }
 
-            public static bool IsVector3Valid(string token, out object value)
+            internal static bool IsVector3Valid(string token, out object value)
             {
                 value = null;
 
@@ -60,7 +60,7 @@ namespace Nazio_LT.Tools.Console
                 return true;
             }
 
-            public static bool IsVector2Valid(string token, out object value)
+            internal static bool IsVector2Valid(string token, out object value)
             {
                 value = null;
 
@@ -78,7 +78,7 @@ namespace Nazio_LT.Tools.Console
             /// <summary>
             /// Usage : Color(Vector)
             /// </summary>
-            public static bool IsColorValid(string token, out object value)
+            internal static bool IsColorValid(string token, out object value)
             {
                 value = null;
 

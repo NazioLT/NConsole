@@ -3,6 +3,9 @@ using UnityEngine;
 
 namespace Nazio_LT.Tools.Console
 {
+    /// <summary>
+    /// All send commands history.
+    /// </summary>
     internal class ConsoleHistory
     {
         private List<string> m_history = new List<string>();

@@ -1,6 +1,6 @@
 using System;
-using System.Collections.Generic;
 using System.Reflection;
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Nazio_LT.Tools.Console
@@ -97,6 +97,11 @@ namespace Nazio_LT.Tools.Console
         internal static bool IsArgumentValid(ParameterInfo parameter, string token, out object value)
         {
             Type argumentType = parameter.ParameterType;
+
+            if(argumentType.IsEnum)
+            {
+                return Enum.TryParse(argumentType, token, out value);
+            }
 
             if (argumentType == typeof(string))
             {

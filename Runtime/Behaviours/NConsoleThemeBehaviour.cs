@@ -4,6 +4,9 @@ using TMPro;
 
 namespace Nazio_LT.Tools.Console
 {
+    /// <summary>
+    /// This class change console elements theme.
+    /// </summary>
     public class NConsoleThemeBehaviour : MonoBehaviour
     {
         private enum TextType

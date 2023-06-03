@@ -30,12 +30,6 @@ namespace Nazio_LT.Tools.Console
         public static void Clear() => NConsole.Instance.ClearConsole();
 
         [NCommand]
-        public static void GetSceneHierarchy()
-        {
-            Debug.LogWarning("Not Implemented");
-        }
-
-        [NCommand]
         public static void Select(string objectName)
         {
             GameObject obj = GameObject.Find(objectName);
