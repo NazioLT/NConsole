@@ -36,7 +36,7 @@ namespace Nazio_LT.Tools.Console
             if (m_history.Count == 0)
                 return "";
 
-            return m_history[m_currentID];
+            return m_history[m_history.Count - m_currentID - 1];
         }
     }
 }
