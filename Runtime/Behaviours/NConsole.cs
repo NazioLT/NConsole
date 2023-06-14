@@ -54,7 +54,11 @@ namespace Nazio_LT.Tools.Console
         {
             if (m_messages == null || m_messages.Count == 0) return;
 
-
+            foreach (NLog log in m_messages)
+            {
+                if(log)
+                    Destroy(log.gameObject);
+            }
 
             m_messages.Clear();
         }
