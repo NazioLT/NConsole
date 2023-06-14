@@ -1,0 +1,33 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1685ca46a4bd8f24cab6dd868fa7f199, type: 3}
+  m_Name: BasicTheme
+  m_EditorClassIdentifier: 
+  LogFormat:
+    m_Color: {r: 1, g: 1, b: 1, a: 1}
+  WarningFormat:
+    m_Color: {r: 1, g: 0.92156863, b: 0.015686275, a: 1}
+  ErrorFormat:
+    m_Color: {r: 1, g: 0, b: 0, a: 1}
+  ExceptionFormat:
+    m_Color: {r: 1, g: 0, b: 0, a: 1}
+  AssertFormat:
+    m_Color: {r: 1, g: 0, b: 0, a: 1}
+  ConsoleFormat:
+    m_Color: {r: 0, g: 1, b: 1, a: 1}
+  UserFormat:
+    m_Color: {r: 1, g: 1, b: 1, a: 1}
+  m_backColor: {r: 0, g: 0, b: 0, a: 0.8}
+  m_terminalTextColor: {r: 1, g: 1, b: 1, a: 1}
+  m_uiColor: {r: 0.09433961, g: 0.09433961, b: 0.09433961, a: 1}
+  m_uiVariantColor: {r: 0.1981132, g: 0.1981132, b: 0.1981132, a: 1}
+  m_uiTextColor: {r: 1, g: 1, b: 1, a: 1}

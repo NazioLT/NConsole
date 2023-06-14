@@ -1,8 +1,8 @@
 {
     "name": "com.nazio_lt.nconsole",
     "version": "1.0.0",
-    "displayName": "Nazio_LT Core",
-    "description": "Nazio_LT's core package.",
+    "displayName": "NConsole",
+    "description": "Nazio_LT's Command Console package.",
     "unity": "2021.3",
     "author": {
         "name": "Henno Théo",
@@ -10,7 +10,7 @@
         "url": "https://linktr.ee/hennotheo"
     },
     "dependencies": {
-        
+        "com.unity.textmeshpro": "3.0.6"
     },
     "changelogUrl": "https://github.com/NazioLT/NConsole",
     "documentationUrl": "",
