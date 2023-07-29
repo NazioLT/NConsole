@@ -17,6 +17,9 @@ NConsole is an in-game command console wich help you to easily debug your game.
 * Asynchronous methods
 * Multiple execution types.
 
+### Requirements
+* Textmeshpro
+
 ## Basic Usage : 
 
 ### In your code : 

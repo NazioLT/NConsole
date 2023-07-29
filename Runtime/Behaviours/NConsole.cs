@@ -148,6 +148,12 @@ namespace Nazio_LT.Tools.Console
                 Debug.LogError("Console has no theme.");
                 return;
             }
+            
+            if (m_theme == null)
+            {
+                Debug.LogError("Console has no Event system in the scene.");
+                return;
+            }
 
             m_terminalBack = m_terminal.GetComponent<Image>();
             m_consoleBack = GetComponentInChildren<ScrollRect>().GetComponent<Image>();
